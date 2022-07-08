@@ -1,0 +1,117 @@
+{
+ "actions": [],
+ "autoname": "field:questions",
+ "creation": "2022-07-06 15:27:11.587924",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "questions",
+  "data_2",
+  "published",
+  "date",
+  "section_break_4",
+  "option_a",
+  "option_b",
+  "column_break_7",
+  "option_c",
+  "option_d",
+  "section_break_10",
+  "answer"
+ ],
+ "fields": [
+  {
+   "fieldname": "questions",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Questions",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "data_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "published",
+   "fieldtype": "Check",
+   "label": "Published"
+  },
+  {
+   "depends_on": "eval:doc.published == 1",
+   "fieldname": "date",
+   "fieldtype": "Datetime",
+   "label": "Date"
+  },
+  {
+   "fieldname": "section_break_4",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "option_a",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Option A",
+   "reqd": 1
+  },
+  {
+   "fieldname": "option_b",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Option B",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "option_c",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Option C",
+   "reqd": 1
+  },
+  {
+   "fieldname": "option_d",
+   "fieldtype": "Data",
+   "label": "Option D",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_10",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "answer",
+   "fieldtype": "Data",
+   "label": "Answer",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2022-07-07 11:32:42.076581",
+ "modified_by": "Administrator",
+ "module": "News",
+ "name": "Quiz Questions",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
