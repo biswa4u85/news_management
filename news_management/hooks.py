@@ -38,8 +38,7 @@ app_license = "MIT"
 
 doctype_js = {
         "Quiz Questions": "public/js/quiz_questions.js",
-		"Blog Post": "public/js/blog_post.js",
-        
+		"Blog Post": "public/js/blog_post.js",    
     }
 # Home Pages
 # ----------
