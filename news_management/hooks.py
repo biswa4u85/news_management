@@ -56,6 +56,10 @@ app_license = "MIT"
 
 # automatically create page for each record of this doctype
 # website_generators = ["Web Page"]
+website_route_rules = [
+        {'from_route':'/details/<docname>', 'to_route':'details'},
+	{'from_route':'/category/<docname>', 'to_route':'category'},
+]
 
 # Installation
 # ------------
