@@ -14,7 +14,3 @@ def fetch_sub_category(doctype, txt, searchfield, start, page_len, filters):
   return frappe.db.sql("""
                       select category from `tabBlog Sub To Sub Category Table` where parent = "{0}"
                       """.format(filters.get("blog_sub_to_category")))  
-  
-
-
-
