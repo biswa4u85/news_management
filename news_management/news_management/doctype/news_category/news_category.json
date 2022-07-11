@@ -1,13 +1,14 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "NC.-.###",
+ "autoname": "NC.-.###. (.{description}.).",
  "creation": "2022-07-11 12:55:10.160388",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "description",
+  "status",
   "lft",
   "rgt",
   "is_group",
@@ -56,12 +57,20 @@
    "label": "Parent News Category",
    "mandatory_depends_on": "eval:doc.is_group==0;",
    "options": "News Category"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Active\nInactive",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2022-07-11 13:55:23.681833",
+ "modified": "2022-07-11 16:58:11.849626",
  "modified_by": "Administrator",
  "module": "News Management",
  "name": "News Category",
