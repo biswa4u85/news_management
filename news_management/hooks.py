@@ -37,7 +37,7 @@ app_license = "MIT"
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
 doctype_js = {
-        "Blog Post": "public/js/blog_post.js",   
+	"Blog Post": "public/js/blog_post.js", 
     }
 # Home Pages
 # ----------
