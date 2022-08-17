@@ -1,0 +1,96 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2022-07-30 13:01:04.260781",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "meta_title",
+  "meta_description",
+  "left_category_one",
+  "left_category_two",
+  "center_category",
+  "right_category_one",
+  "right_category_two",
+  "bottom_category",
+  "key_series_footer"
+ ],
+ "fields": [
+  {
+   "fieldname": "meta_title",
+   "fieldtype": "Data",
+   "label": "Meta Title"
+  },
+  {
+   "fieldname": "meta_description",
+   "fieldtype": "Small Text",
+   "label": "Meta Description"
+  },
+  {
+   "fieldname": "left_category_one",
+   "fieldtype": "Link",
+   "label": "Left Category One",
+   "options": "Blog Category"
+  },
+  {
+   "fieldname": "left_category_two",
+   "fieldtype": "Link",
+   "label": "Left Category Two",
+   "options": "Blog Category"
+  },
+  {
+   "fieldname": "center_category",
+   "fieldtype": "Link",
+   "label": "Center Category",
+   "options": "Blog Category"
+  },
+  {
+   "fieldname": "right_category_one",
+   "fieldtype": "Link",
+   "label": "Right Category One",
+   "options": "Blog Category"
+  },
+  {
+   "fieldname": "right_category_two",
+   "fieldtype": "Link",
+   "label": "Right Category Two",
+   "options": "Blog Category"
+  },
+  {
+   "fieldname": "bottom_category",
+   "fieldtype": "Link",
+   "label": "Bottom Category",
+   "options": "Blog Category"
+  },
+  {
+   "fieldname": "key_series_footer",
+   "fieldtype": "Table MultiSelect",
+   "in_standard_filter": 1,
+   "label": "Key Series footer",
+   "options": "News Category Child"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2022-08-07 03:20:36.768467",
+ "modified_by": "Administrator",
+ "module": "News Management",
+ "name": "News Home Page Lotus",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

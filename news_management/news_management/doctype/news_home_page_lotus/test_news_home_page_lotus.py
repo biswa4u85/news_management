@@ -4,5 +4,5 @@
 # import frappe
 import unittest
 
-class TestNewsCategory(unittest.TestCase):
+class TestNewsHomePageLotus(unittest.TestCase):
 	pass
