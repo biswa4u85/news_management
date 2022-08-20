@@ -37,8 +37,8 @@ app_license = "MIT"
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
 doctype_js = {
-	"Blog Post": "public/js/blog_post.js", 
-    }
+    "Blog Post": "public/js/client_script.js",
+}
 # Home Pages
 # ----------
 
@@ -56,8 +56,8 @@ doctype_js = {
 # automatically create page for each record of this doctype
 # website_generators = ["Web Page"]
 website_route_rules = [
-        {'from_route':'/details/<docname>', 'to_route':'details'},
-	{'from_route':'/category/<docname>', 'to_route':'category'},
+    {'from_route': '/details/<docname>', 'to_route': 'details'},
+    {'from_route': '/category/<docname>', 'to_route': 'category'},
 ]
 
 # Installation
@@ -112,7 +112,18 @@ website_route_rules = [
 
 # Scheduled Tasks
 # ---------------
-
+scheduler_events = {
+    "cron": {
+        "0 8 * * *": [
+            "news_management.fixtures_api.fetchDataSeries"
+        ]
+    },
+    "cron": {
+        "0 8 * * *": [
+            "news_management.fixtures_api.fetchDataFixtures"
+        ]
+    }
+}
 # scheduler_events = {
 # 	"all": [
 # 		"news_management.tasks.all"
@@ -159,24 +170,24 @@ website_route_rules = [
 # --------------------
 
 user_data_fields = [
-	{
-		"doctype": "{doctype_1}",
-		"filter_by": "{filter_by}",
-		"redact_fields": ["{field_1}", "{field_2}"],
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_2}",
-		"filter_by": "{filter_by}",
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_3}",
-		"strict": False,
-	},
-	{
-		"doctype": "{doctype_4}"
-	}
+    {
+        "doctype": "{doctype_1}",
+        "filter_by": "{filter_by}",
+        "redact_fields": ["{field_1}", "{field_2}"],
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_2}",
+        "filter_by": "{filter_by}",
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_3}",
+        "strict": False,
+    },
+    {
+        "doctype": "{doctype_4}"
+    }
 ]
 
 # Authentication and authorization

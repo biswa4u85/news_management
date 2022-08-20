@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2022-08-20 16:19:06.258990",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "series_id",
+  "status",
+  "venue",
+  "result",
+  "match_title",
+  "match_subtitle",
+  "id",
+  "date",
+  "away",
+  "home"
+ ],
+ "fields": [
+  {
+   "fieldname": "series_id",
+   "fieldtype": "Data",
+   "label": "Series ID"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "Status"
+  },
+  {
+   "fieldname": "venue",
+   "fieldtype": "Data",
+   "label": "Venue"
+  },
+  {
+   "fieldname": "result",
+   "fieldtype": "Data",
+   "label": "Result"
+  },
+  {
+   "fieldname": "match_title",
+   "fieldtype": "Data",
+   "label": "Match Title"
+  },
+  {
+   "fieldname": "match_subtitle",
+   "fieldtype": "Data",
+   "label": "Match Subtitle"
+  },
+  {
+   "fieldname": "id",
+   "fieldtype": "Data",
+   "label": "ID"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Datetime",
+   "label": "Date"
+  },
+  {
+   "fieldname": "away",
+   "fieldtype": "Data",
+   "label": "Away"
+  },
+  {
+   "fieldname": "home",
+   "fieldtype": "Data",
+   "label": "Home"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2022-08-21 00:33:39.609383",
+ "modified_by": "Administrator",
+ "module": "News Management",
+ "name": "Live Score Fixtures",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
