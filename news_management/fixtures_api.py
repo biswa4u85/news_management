@@ -1,7 +1,7 @@
 import frappe
 import requests
 import json
-import datetime
+from datetime import datetime
 
 
 @frappe.whitelist(allow_guest=True)
@@ -70,11 +70,23 @@ def fetchDataFixtures():
             isExit = frappe.db.exists(docType, {"id": item['id']})
             if (isExit):
                 # frappe.msgprint(json.dumps(item['date']))
+                now = datetime(item['date'])
+                date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
+                frappe.msgprint('DateTime String:', date_time_str)
+
+                # frappe.msgprint(json.dumps(datetime_object))
+
+# "2022-08-22T07:15:00+00:00"
+# 22-08-2022 12:48:16
+
                 frappe.db.set_value(docType, isExit, {
                     'id': item['id'],
                     "series_id": item['series_id'],
                     "venue": item['venue'],
-                    # "date": item['date'],
+                    "date": item['date'],
+                    # "date": item['date'].strftime("%d-%m-%Y %H:%M:%S"),
+                    # "date": datetime_object.strftime("%d-%m-%Y %H:%M:%S"),
+                    # datetime.strptime(item['date'], "%d-%m-%Y %H:%M:%S"),
                     "status": item['status'],
                     "result": item['result'],
                     "match_title": item['match_title'],

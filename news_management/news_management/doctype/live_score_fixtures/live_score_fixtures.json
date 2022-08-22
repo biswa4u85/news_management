@@ -55,7 +55,7 @@
   },
   {
    "fieldname": "date",
-   "fieldtype": "Datetime",
+   "fieldtype": "Data",
    "label": "Date"
   },
   {
@@ -71,7 +71,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-08-21 00:33:39.609383",
+ "modified": "2022-08-22 12:49:45.059539",
  "modified_by": "Administrator",
  "module": "News Management",
  "name": "Live Score Fixtures",
