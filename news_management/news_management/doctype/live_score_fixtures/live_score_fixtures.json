@@ -13,9 +13,10 @@
   "match_title",
   "match_subtitle",
   "id",
-  "date",
   "away",
-  "home"
+  "home",
+  "date",
+  "datetime"
  ],
  "fields": [
   {
@@ -67,11 +68,16 @@
    "fieldname": "home",
    "fieldtype": "Data",
    "label": "Home"
+  },
+  {
+   "fieldname": "datetime",
+   "fieldtype": "Data",
+   "label": "DateTime"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-08-22 12:49:45.059539",
+ "modified": "2022-08-22 15:47:23.970371",
  "modified_by": "Administrator",
  "module": "News Management",
  "name": "Live Score Fixtures",

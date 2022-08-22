@@ -74,6 +74,7 @@ def fetchDataFixtures():
                     'id': item['id'],
                     "series_id": item['series_id'],
                     "venue": item['venue'],
+                    "datetime": item['date'],
                     "date": item['date'],
                     "status": item['status'],
                     "result": item['result'],
@@ -87,6 +88,7 @@ def fetchDataFixtures():
                 addData.id = item['id']
                 addData.series_id = item['series_id']
                 addData.venue = item['venue']
+                addData.datetime = item['date']
                 addData.date = item['date']
                 addData.status = item['status']
                 addData.result = item['result']
