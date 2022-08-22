@@ -3,7 +3,6 @@ import requests
 import json
 import datetime
 
-
 @frappe.whitelist(allow_guest=True)
 def fetchDataSeries():
     apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
@@ -25,7 +24,6 @@ def fetchDataSeries():
         for series in data['results']:
             seriesType = series['type']
             for item in series['series']:
-                # frappe.msgprint(json.dumps(item['updated_at']))
                 isExit = frappe.db.exists(
                     docType, {"series_id": item['series_id']})
                 if (isExit):
@@ -68,14 +66,22 @@ def fetchDataFixtures():
         data = response.json()
         docType = "Live Score Fixtures"
         for item in data['results']:
+
+            # "2022-08-22T07:15:00+00:00"
+            # 22-08-2022 12:45:16
+            newDate = datetime.datetime.fromisoformat(item['date']).strftime("%d-%m-%Y")
+            newDateTime = datetime.datetime.fromisoformat(item['date']).strftime("%d-%m-%Y %H:%M:%S")
+            # frappe.msgprint(newDate)
+            # frappe.msgprint(newDateTime)
+
             isExit = frappe.db.exists(docType, {"id": item['id']})
             if (isExit):
                 frappe.db.set_value(docType, isExit, {
                     'id': item['id'],
                     "series_id": item['series_id'],
                     "venue": item['venue'],
-                    "datetime": item['date'],
-                    "date": item['date'],
+                    "date": newDate,
+                    "datetime":newDateTime,
                     "status": item['status'],
                     "result": item['result'],
                     "match_title": item['match_title'],
@@ -88,8 +94,8 @@ def fetchDataFixtures():
                 addData.id = item['id']
                 addData.series_id = item['series_id']
                 addData.venue = item['venue']
-                addData.datetime = item['date']
-                addData.date = item['date']
+                addData.date = newDate
+                addData.datetime = newDateTime
                 addData.status = item['status']
                 addData.result = item['result']
                 addData.match_title = item['match_title']
@@ -111,13 +117,16 @@ def fetchDataFixtures():
         data = response.json()
         docType = "Live Score Fixtures"
         for item in data['results']:
+            newDate = datetime.datetime.fromisoformat(item['date']).strftime("%d-%m-%Y")
+            newDateTime = datetime.datetime.fromisoformat(item['date']).strftime("%d-%m-%Y %H:%M:%S")
             isExit = frappe.db.exists(docType, {"id": item['id']})
             if (isExit):
                 frappe.db.set_value(docType, isExit, {
                     'id': item['id'],
                     "series_id": item['series_id'],
                     "venue": item['venue'],
-                    "date": item['date'],
+                    "date": newDate,
+                    "datetime": newDateTime,
                     "status": item['status'],
                     "result": item['result'],
                     "match_title": item['match_title'],
@@ -130,7 +139,8 @@ def fetchDataFixtures():
                 addData.id = item['id']
                 addData.series_id = item['series_id']
                 addData.venue = item['venue']
-                addData.date = item['date']
+                addData.date = newDate
+                addData.datetime = newDateTime
                 addData.status = item['status']
                 addData.result = item['result']
                 addData.match_title = item['match_title']
