@@ -2,7 +2,11 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "NWHL.-.#####",
+<<<<<<< HEAD
  "creation": "2022-08-19 13:03:49.889229",
+=======
+ "creation": "2022-07-08 22:08:50.208627",
+>>>>>>> 0c8de8cd50584fe66268ee8e214dd6c85b84f3cf
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -35,7 +39,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2022-08-19 13:03:49.889229",
+=======
+ "modified": "2022-08-21 02:47:16.158361",
+>>>>>>> 0c8de8cd50584fe66268ee8e214dd6c85b84f3cf
  "modified_by": "Administrator",
  "module": "News Management",
  "name": "News Headlines",

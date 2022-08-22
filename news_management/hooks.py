@@ -113,16 +113,22 @@ website_route_rules = [
 # Scheduled Tasks
 # ---------------
 scheduler_events = {
-    "cron": {
-        "0 8 * * *": [
-            "news_management.fixtures_api.fetchDataSeries"
-        ]
-    },
-    "cron": {
-        "0 8 * * *": [
-            "news_management.fixtures_api.fetchDataFixtures"
-        ]
-    }
+    "hourly": [
+        "news_management.fixtures_api.fetchDataSeries"
+    ],
+    "hourly": [
+        "news_management.fixtures_api.fetchDataFixtures"
+    ],
+    # "cron": {
+    #     "0 8 * * *": [
+    #         "news_management.fixtures_api.fetchDataSeries"
+    #     ]
+    # },
+    # "cron": {
+    #     "0 8 * * *": [
+    #         "news_management.fixtures_api.fetchDataFixtures"
+    #     ]
+    # }
 }
 # scheduler_events = {
 # 	"all": [
