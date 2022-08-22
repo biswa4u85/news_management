@@ -1,7 +1,7 @@
 import frappe
 import requests
 import json
-from datetime import datetime
+import datetime
 
 
 @frappe.whitelist(allow_guest=True)
@@ -25,6 +25,7 @@ def fetchDataSeries():
         for series in data['results']:
             seriesType = series['type']
             for item in series['series']:
+                # frappe.msgprint(json.dumps(item['updated_at']))
                 isExit = frappe.db.exists(
                     docType, {"series_id": item['series_id']})
                 if (isExit):
@@ -34,7 +35,7 @@ def fetchDataSeries():
                         "season": item['season'],
                         "series_name": item['series_name'],
                         "status": item['status'],
-                        # "updated_at": item['updated_at'],
+                        "updated_at": item['updated_at'],
                     })
                 else:
                     addData = frappe.new_doc(docType)
@@ -43,7 +44,7 @@ def fetchDataSeries():
                     addData.season = item['season']
                     addData.series_name = item['series_name']
                     addData.status = item['status']
-                    # addData.updated_at = item['updated_at']
+                    addData.updated_at = item['updated_at']
                     addData.insert()
         frappe.msgprint('Series Updated Successfully')
 
@@ -69,24 +70,11 @@ def fetchDataFixtures():
         for item in data['results']:
             isExit = frappe.db.exists(docType, {"id": item['id']})
             if (isExit):
-                # frappe.msgprint(json.dumps(item['date']))
-                now = datetime(item['date'])
-                date_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
-                frappe.msgprint('DateTime String:', date_time_str)
-
-                # frappe.msgprint(json.dumps(datetime_object))
-
-# "2022-08-22T07:15:00+00:00"
-# 22-08-2022 12:48:16
-
                 frappe.db.set_value(docType, isExit, {
                     'id': item['id'],
                     "series_id": item['series_id'],
                     "venue": item['venue'],
                     "date": item['date'],
-                    # "date": item['date'].strftime("%d-%m-%Y %H:%M:%S"),
-                    # "date": datetime_object.strftime("%d-%m-%Y %H:%M:%S"),
-                    # datetime.strptime(item['date'], "%d-%m-%Y %H:%M:%S"),
                     "status": item['status'],
                     "result": item['result'],
                     "match_title": item['match_title'],
@@ -99,7 +87,7 @@ def fetchDataFixtures():
                 addData.id = item['id']
                 addData.series_id = item['series_id']
                 addData.venue = item['venue']
-                # addData.date = datetime.datetime(item['date'])
+                addData.date = item['date']
                 addData.status = item['status']
                 addData.result = item['result']
                 addData.match_title = item['match_title']
@@ -127,7 +115,7 @@ def fetchDataFixtures():
                     'id': item['id'],
                     "series_id": item['series_id'],
                     "venue": item['venue'],
-                    # "date": item['date'],
+                    "date": item['date'],
                     "status": item['status'],
                     "result": item['result'],
                     "match_title": item['match_title'],
@@ -140,7 +128,7 @@ def fetchDataFixtures():
                 addData.id = item['id']
                 addData.series_id = item['series_id']
                 addData.venue = item['venue']
-                # addData.date = datetime.datetime(item['date'])
+                addData.date = item['date']
                 addData.status = item['status']
                 addData.result = item['result']
                 addData.match_title = item['match_title']

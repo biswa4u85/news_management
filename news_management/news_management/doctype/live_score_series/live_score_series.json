@@ -47,13 +47,13 @@
   },
   {
    "fieldname": "updated_at",
-   "fieldtype": "Datetime",
+   "fieldtype": "Data",
    "label": "Updated AT"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-08-21 00:51:40.361381",
+ "modified": "2022-08-22 14:59:40.162416",
  "modified_by": "Administrator",
  "module": "News Management",
  "name": "Live Score Series",
