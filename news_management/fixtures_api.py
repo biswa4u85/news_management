@@ -3,6 +3,7 @@ import requests
 import json
 import datetime
 
+
 @frappe.whitelist(allow_guest=True)
 def fetchDataSeries():
     apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
@@ -24,6 +25,13 @@ def fetchDataSeries():
         for series in data['results']:
             seriesType = series['type']
             for item in series['series']:
+                # Date Format
+                newDay = datetime.datetime.fromisoformat(
+                    item['updated_at']).strftime("%d")
+                newMonth = datetime.datetime.fromisoformat(
+                    item['updated_at']).strftime("%m")
+                newYear = datetime.datetime.fromisoformat(
+                    item['updated_at']).strftime("%Y")
                 isExit = frappe.db.exists(
                     docType, {"series_id": item['series_id']})
                 if (isExit):
@@ -33,7 +41,8 @@ def fetchDataSeries():
                         "season": item['season'],
                         "series_name": item['series_name'],
                         "status": item['status'],
-                        "updated_at": item['updated_at'],
+                        "updated_at": datetime.datetime(
+                            int(newYear), int(newMonth), int(newDay)),
                     })
                 else:
                     addData = frappe.new_doc(docType)
@@ -42,7 +51,8 @@ def fetchDataSeries():
                     addData.season = item['season']
                     addData.series_name = item['series_name']
                     addData.status = item['status']
-                    addData.updated_at = item['updated_at']
+                    addData.updated_at = datetime.datetime(
+                        int(newYear), int(newMonth), int(newDay))
                     addData.insert()
         frappe.msgprint('Series Updated Successfully')
 
@@ -66,22 +76,29 @@ def fetchDataFixtures():
         data = response.json()
         docType = "Live Score Fixtures"
         for item in data['results']:
-
-            # "2022-08-22T07:15:00+00:00"
-            # 22-08-2022 12:45:16
-            newDate = datetime.datetime.fromisoformat(item['date']).strftime("%d-%m-%Y")
-            newDateTime = datetime.datetime.fromisoformat(item['date']).strftime("%d-%m-%Y %H:%M:%S")
-            # frappe.msgprint(newDate)
-            # frappe.msgprint(newDateTime)
-
+            # Date Format
+            newDay = datetime.datetime.fromisoformat(
+                item['date']).strftime("%d")
+            newMonth = datetime.datetime.fromisoformat(
+                item['date']).strftime("%m")
+            newYear = datetime.datetime.fromisoformat(
+                item['date']).strftime("%Y")
+            newHour = datetime.datetime.fromisoformat(
+                item['date']).strftime("%H")
+            newMin = datetime.datetime.fromisoformat(
+                item['date']).strftime("%M")
+            newSec = datetime.datetime.fromisoformat(
+                item['date']).strftime("%S")
             isExit = frappe.db.exists(docType, {"id": item['id']})
             if (isExit):
                 frappe.db.set_value(docType, isExit, {
                     'id': item['id'],
                     "series_id": item['series_id'],
                     "venue": item['venue'],
-                    "date": newDate,
-                    "datetime":newDateTime,
+                    "date": datetime.datetime(
+                        int(newYear), int(newMonth), int(newDay)),
+                    "datetime": datetime.datetime(int(newYear), int(
+                        newMonth), int(newDay), int(newHour), int(newMin), int(newSec), ),
                     "status": item['status'],
                     "result": item['result'],
                     "match_title": item['match_title'],
@@ -94,8 +111,10 @@ def fetchDataFixtures():
                 addData.id = item['id']
                 addData.series_id = item['series_id']
                 addData.venue = item['venue']
-                addData.date = newDate
-                addData.datetime = newDateTime
+                addData.date = datetime.datetime(
+                    int(newYear), int(newMonth), int(newDay))
+                addData.datetime = datetime.datetime(int(newYear), int(
+                    newMonth), int(newDay), int(newHour), int(newMin), int(newSec), )
                 addData.status = item['status']
                 addData.result = item['result']
                 addData.match_title = item['match_title']
@@ -117,16 +136,29 @@ def fetchDataFixtures():
         data = response.json()
         docType = "Live Score Fixtures"
         for item in data['results']:
-            newDate = datetime.datetime.fromisoformat(item['date']).strftime("%d-%m-%Y")
-            newDateTime = datetime.datetime.fromisoformat(item['date']).strftime("%d-%m-%Y %H:%M:%S")
+            # Date Format
+            newDay = datetime.datetime.fromisoformat(
+                item['date']).strftime("%d")
+            newMonth = datetime.datetime.fromisoformat(
+                item['date']).strftime("%m")
+            newYear = datetime.datetime.fromisoformat(
+                item['date']).strftime("%Y")
+            newHour = datetime.datetime.fromisoformat(
+                item['date']).strftime("%H")
+            newMin = datetime.datetime.fromisoformat(
+                item['date']).strftime("%M")
+            newSec = datetime.datetime.fromisoformat(
+                item['date']).strftime("%S")
             isExit = frappe.db.exists(docType, {"id": item['id']})
             if (isExit):
                 frappe.db.set_value(docType, isExit, {
                     'id': item['id'],
                     "series_id": item['series_id'],
                     "venue": item['venue'],
-                    "date": newDate,
-                    "datetime": newDateTime,
+                    "date": datetime.datetime(
+                        int(newYear), int(newMonth), int(newDay)),
+                    "datetime": datetime.datetime(int(newYear), int(
+                        newMonth), int(newDay), int(newHour), int(newMin), int(newSec), ),
                     "status": item['status'],
                     "result": item['result'],
                     "match_title": item['match_title'],
@@ -139,8 +171,10 @@ def fetchDataFixtures():
                 addData.id = item['id']
                 addData.series_id = item['series_id']
                 addData.venue = item['venue']
-                addData.date = newDate
-                addData.datetime = newDateTime
+                addData.date = datetime.datetime(
+                    int(newYear), int(newMonth), int(newDay))
+                addData.datetime = datetime.datetime(int(newYear), int(
+                    newMonth), int(newDay), int(newHour), int(newMin), int(newSec), )
                 addData.status = item['status']
                 addData.result = item['result']
                 addData.match_title = item['match_title']
