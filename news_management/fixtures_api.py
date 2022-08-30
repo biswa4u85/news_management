@@ -25,13 +25,6 @@ def fetchDataSeries():
         for series in data['results']:
             seriesType = series['type']
             for item in series['series']:
-                # Date Format
-                newDay = datetime.datetime.fromisoformat(
-                    item['updated_at']).strftime("%d")
-                newMonth = datetime.datetime.fromisoformat(
-                    item['updated_at']).strftime("%m")
-                newYear = datetime.datetime.fromisoformat(
-                    item['updated_at']).strftime("%Y")
                 isExit = frappe.db.exists(
                     docType, {"series_id": item['series_id']})
                 if (isExit):
@@ -41,8 +34,7 @@ def fetchDataSeries():
                         "season": item['season'],
                         "series_name": item['series_name'],
                         "status": item['status'],
-                        "updated_at": datetime.datetime(
-                            int(newYear), int(newMonth), int(newDay)),
+                        "updated_at": item['updated_at'],
                     })
                 else:
                     addData = frappe.new_doc(docType)
@@ -51,8 +43,7 @@ def fetchDataSeries():
                     addData.season = item['season']
                     addData.series_name = item['series_name']
                     addData.status = item['status']
-                    addData.updated_at = datetime.datetime(
-                        int(newYear), int(newMonth), int(newDay))
+                    addData.updated_at = item['updated_at']
                     addData.insert()
         frappe.msgprint('Series Updated Successfully')
 
