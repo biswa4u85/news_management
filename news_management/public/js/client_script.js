@@ -1,6 +1,6 @@
 frappe.ui.form.on('Blog Post', {
     setup: function (frm) {
-        frm.set_query('blog_category', function (doc) {
+        frm.set_query('news_category', function (doc) {
             return {
                 filters: {
                     'status': "Active"
@@ -21,6 +21,8 @@ frappe.ui.form.on('Blog Post', {
             },
             callback: function (r) {
                 let date = frappe.datetime.nowdate();
+
+
                 if (r.message.published == 1) {
                     cur_frm.set_value("published_status", 1);
                     cur_frm.set_value("published_on", date);
