@@ -113,10 +113,10 @@ website_route_rules = [
 # Scheduled Tasks
 # ---------------
 scheduler_events = {
-    "hourly": [
+    "daily": [
         "news_management.fixtures_api.fetchDataSeries"
     ],
-    "hourly": [
+    "daily": [
         "news_management.fixtures_api.fetchDataFixtures"
     ],
     # "cron": {
