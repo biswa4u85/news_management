@@ -3,7 +3,6 @@ import requests
 import json
 import datetime
 
-
 @frappe.whitelist(allow_guest=True)
 def fetchDataSeries():
     apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
@@ -174,3 +173,23 @@ def fetchDataFixtures():
                 addData.away = json.dumps(item['away'])
                 addData.insert()
         frappe.msgprint('Fixtures Updated Successfully')
+
+
+@frappe.whitelist(allow_guest = True)
+def getHighlights(query):
+    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
+    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
+    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+
+    # Series
+    url = apiUrl + "/match/" + query
+    payload = {}
+    headers = {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': apiHost
+    }
+    response = requests.request("GET", url, headers=headers, data=payload)
+    if (response.status_code == 200):
+        data = response.json()
+        return data
