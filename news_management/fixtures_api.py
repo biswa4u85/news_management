@@ -3,6 +3,48 @@ import requests
 import json
 import datetime
 
+
+@frappe.whitelist(allow_guest=True)
+def fetchDataSportsList():
+    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
+    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
+    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+
+    # Series
+    url = apiUrl + "/sports/events-count?locale=en_INT&timezone=-4"
+    payload = {}
+    headers = {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': apiHost
+    }
+    response = requests.request("GET", url, headers=headers, data=payload)
+    if (response.status_code == 200):
+        data = response.json()
+        docType = "All Sports"
+        frappe.msgprint(str(data))
+        for item in data['DATA']['SPORTS']:
+            isExit = frappe.db.exists(
+                docType, {"sport_id": item['sport_id']})
+            if (isExit):
+                frappe.db.set_value(docType, isExit, {
+                    'sport_id': item['sport_id'],
+                    "events_count": item['events_count'],
+                    "events_count_live": item['events_count_live'],
+                    "is_popular": item['is_popular'],
+                    "sport_name": item['sport_name'],
+                })
+            else:
+                addData = frappe.new_doc(docType)
+                addData.sport_id = item['sport_id']
+                addData.events_count = item['events_count']
+                addData.events_count_live = item['events_count_live']
+                addData.is_popular = item['is_popular']
+                addData.sport_name = item['sport_name']
+                addData.insert()
+        frappe.msgprint('Sports are Updated Successfully')
+
+
 @frappe.whitelist(allow_guest=True)
 def fetchDataSeries():
     apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
@@ -175,21 +217,73 @@ def fetchDataFixtures():
         frappe.msgprint('Fixtures Updated Successfully')
 
 
-@frappe.whitelist(allow_guest = True)
-def getHighlights(query):
+@frappe.whitelist(allow_guest=True)
+def getSportsData(query):
     apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
     apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
     apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
 
-    # Series
-    url = apiUrl + "/match/" + query
+    url = apiUrl + "/sports/" + query
     payload = {}
     headers = {
-        'Content-Type': 'application/json',
-        'X-RapidAPI-Key': apiKey,
-        'X-RapidAPI-Host': apiHost
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": apiHost
     }
-    response = requests.request("GET", url, headers=headers, data=payload)
+    response = requests.request(
+        "GET", url, headers=headers, data=payload)
     if (response.status_code == 200):
-        data = response.json()
-        return data
+        return response.json()
+
+
+@frappe.whitelist(allow_guest=True)
+def getEventsData(query):
+    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
+    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
+    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+
+    url = apiUrl + "/events/" + query
+    payload = {}
+    headers = {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": apiHost
+    }
+    response = requests.request(
+        "GET", url, headers=headers, data=payload)
+    if (response.status_code == 200):
+        return response.json()
+
+
+@frappe.whitelist(allow_guest=True)
+def getTeamsData(query):
+    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
+    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
+    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+
+    url = apiUrl + "/teams/" + query
+    payload = {}
+    headers = {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": apiHost
+    }
+    response = requests.request(
+        "GET", url, headers=headers, data=payload)
+    if (response.status_code == 200):
+        return response.json()
+
+
+@frappe.whitelist(allow_guest=True)
+def getTournamentsData(query):
+    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
+    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
+    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+
+    url = apiUrl + "/tournaments/" + query
+    payload = {}
+    headers = {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": apiHost
+    }
+    response = requests.request(
+        "GET", url, headers=headers, data=payload)
+    if (response.status_code == 200):
+        return response.json()
