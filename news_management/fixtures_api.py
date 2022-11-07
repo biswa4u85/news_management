@@ -215,6 +215,25 @@ def fetchEvents():
 
 
 @frappe.whitelist(allow_guest=True)
+def fetchEventsDetails(query):
+    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
+    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
+    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+
+    url = apiUrl + "/events/data?locale=en_INT&event_id=" + query
+    payload = {}
+    headers = {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": apiHost
+    }
+    response = requests.request(
+        "GET", url, headers=headers, data=payload)
+    if (response.status_code == 200):
+        data = response.json()
+        return data
+
+
+@frappe.whitelist(allow_guest=True)
 def fetchTournaments():
     apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
     apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
@@ -234,10 +253,11 @@ def fetchTournaments():
         docType = "Flash Tournaments"
         for item in data['DATA']:
             isExit = frappe.db.exists(
-                docType, {"actual_tournament_season_id": item['ACTUAL_TOURNAMENT_SEASON_ID']})
+                docType, {"template_id": item['TEMPLATE_ID']})
             if (isExit):
                 frappe.db.set_value(docType, isExit, {
-                    "title": item['LEAGUE_NAME'],
+                    "title": item['TEMPLATE_ID'],
+                    "tournament_name": item['LEAGUE_NAME'],
                     'country_name': item['COUNTRY_NAME'],
                     'country_id': item['COUNTRY_ID'],
                     'actual_tournament_season_id': item['ACTUAL_TOURNAMENT_SEASON_ID'],
@@ -248,7 +268,8 @@ def fetchTournaments():
                 })
             else:
                 addData = frappe.new_doc(docType)
-                addData.title = item['LEAGUE_NAME']
+                addData.title = item['TEMPLATE_ID']
+                addData.tournament_name = item['LEAGUE_NAME']
                 addData.country_name = item['COUNTRY_NAME']
                 addData.country_id = item['COUNTRY_ID']
                 addData.actual_tournament_season_id = item['ACTUAL_TOURNAMENT_SEASON_ID']

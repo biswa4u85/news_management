@@ -17,7 +17,8 @@
   "group_id",
   "season_id",
   "template_id",
-  "stages"
+  "stages",
+  "tournament_name"
  ],
  "fields": [
   {
@@ -78,6 +79,12 @@
    "fieldname": "stages",
    "fieldtype": "Long Text",
    "label": "STAGES"
+  },
+  {
+   "fieldname": "tournament_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "TOURNAMENT NAME"
   }
  ],
  "has_web_view": 1,
@@ -85,7 +92,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2022-11-07 10:34:05.554732",
+ "modified": "2022-11-07 18:39:12.658575",
  "modified_by": "Administrator",
  "module": "News Management",
  "name": "Flash Tournaments",
