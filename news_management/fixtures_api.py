@@ -5,6 +5,7 @@ import datetime
 
 # frappe.msgprint(str(data))
 
+
 @frappe.whitelist(allow_guest=True)
 def fetchMultiSearch(query):
     apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
@@ -191,21 +192,21 @@ def fetchEvents():
                 if (isExit):
                     frappe.db.set_value(docType, isExit, {
                         'tournament_id': tournament['TOURNAMENT_ID'],
-                        'tournament_details': str(tournament),
+                        'tournament_details': json.dumps(tournament),
                         'event_id': item['EVENT_ID'],
                         'date': startTime,
                         'start_time': startTime,
-                        'event_details': str(item),
+                        'event_details': json.dumps(item),
                         "title": item['EVENT_ID'],
                     })
                 else:
                     addData = frappe.new_doc(docType)
                     addData.tournament_id = tournament['TOURNAMENT_ID']
-                    addData.tournament_details = str(tournament)
+                    addData.tournament_details = json.dumps(tournament)
                     addData.event_id = item['EVENT_ID']
                     addData.date = startTime
                     addData.start_time = startTime
-                    addData.event_details = str(item)
+                    addData.event_details = json.dumps(item)
                     addData.title = item['EVENT_ID']
                     addData.insert()
         frappe.msgprint('Events are Updated Successfully')
