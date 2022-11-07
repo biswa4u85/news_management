@@ -1,0 +1,117 @@
+{
+ "actions": [],
+ "allow_guest_to_view": 1,
+ "allow_import": 1,
+ "allow_rename": 1,
+ "creation": "2022-11-04 23:15:17.915289",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "published",
+  "route",
+  "status",
+  "sport_id",
+  "events_count",
+  "events_count_live",
+  "is_popular",
+  "sport_name"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "no_copy": 1,
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "published",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Published"
+  },
+  {
+   "depends_on": "published",
+   "fieldname": "route",
+   "fieldtype": "Data",
+   "label": "Route",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Active\nInactive",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sport_id",
+   "fieldtype": "Data",
+   "label": "SPORT ID",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "events_count",
+   "fieldtype": "Data",
+   "label": "EVENTS_COUNT"
+  },
+  {
+   "fieldname": "events_count_live",
+   "fieldtype": "Data",
+   "label": "EVENTS_COUNT_LIVE"
+  },
+  {
+   "fieldname": "is_popular",
+   "fieldtype": "Data",
+   "label": "IS_POPULAR"
+  },
+  {
+   "fieldname": "sport_name",
+   "fieldtype": "Data",
+   "label": "SPORT_NAME"
+  }
+ ],
+ "has_web_view": 1,
+ "icon": "fa fa-tag",
+ "index_web_pages_for_search": 1,
+ "is_published_field": "published",
+ "links": [],
+ "modified": "2022-11-07 08:58:05.287923",
+ "modified_by": "Administrator",
+ "module": "News Management",
+ "name": "Flash Sports",
+ "nsm_parent_field": "parent_blog_category",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Website Manager",
+   "set_user_permissions": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Blogger"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "title",
+ "track_changes": 1
+}

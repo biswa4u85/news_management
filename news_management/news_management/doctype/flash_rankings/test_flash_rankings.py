@@ -4,5 +4,5 @@
 # import frappe
 import unittest
 
-class TestAllSports(unittest.TestCase):
+class TestFlashRankings(unittest.TestCase):
 	pass

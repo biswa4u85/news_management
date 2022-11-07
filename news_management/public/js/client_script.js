@@ -10,7 +10,6 @@ frappe.ui.form.on('Blog Post', {
     }
 });
 
-
 frappe.ui.form.on('Blog Post', {
     setup: function (frm) {
         frappe.call({
@@ -27,7 +26,6 @@ frappe.ui.form.on('Blog Post', {
                     cur_frm.set_value("published_status", 1);
                     cur_frm.set_value("published_on", date);
                     cur_frm.set_value("published", 1);
-                    //msgprint("Active");
                 }
 
             }
@@ -35,23 +33,39 @@ frappe.ui.form.on('Blog Post', {
     }
 });
 
-
-frappe.listview_settings['Live Score Series'] = {
+frappe.listview_settings['Flash Sports'] = {
     onload: function (listview) {
+        listview.page.add_inner_button("Fetch Sports", function () {
+            frappe.call({
+                method: "news_management.fixtures_api.fetchSports",
+                args: {}
+            });
+        }).css({ 'color': 'red', 'font-weight': 'bold' });
         listview.page.add_inner_button("Fetch Data", function () {
             frappe.call({
-                method: "news_management.fixtures_api.fetchDataSeries",
+                method: "news_management.fixtures_api.fetchSportsEventsCount",
                 args: {}
             });
         }).css({ 'color': 'red', 'font-weight': 'bold' });
     },
 };
 
-frappe.listview_settings['Live Score Fixtures'] = {
+frappe.listview_settings['Flash Rankings'] = {
     onload: function (listview) {
         listview.page.add_inner_button("Fetch Data", function () {
             frappe.call({
-                method: "news_management.fixtures_api.fetchDataFixtures",
+                method: "news_management.fixtures_api.fetchRankings",
+                args: {}
+            });
+        }).css({ 'color': 'red', 'font-weight': 'bold' });
+    },
+};
+
+frappe.listview_settings['Flash Events'] = {
+    onload: function (listview) {
+        listview.page.add_inner_button("Fetch Data", function () {
+            frappe.call({
+                method: "news_management.fixtures_api.fetchEvents",
                 args: {}
             });
         }).css({ 'color': 'red', 'font-weight': 'bold' });

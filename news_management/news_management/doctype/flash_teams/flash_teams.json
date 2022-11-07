@@ -3,7 +3,7 @@
  "allow_guest_to_view": 1,
  "allow_import": 1,
  "allow_rename": 1,
- "creation": "2022-10-25 10:57:19.911900",
+ "creation": "2022-11-07 08:52:29.211833",
  "doctype": "DocType",
  "document_type": "Setup",
  "engine": "InnoDB",
@@ -14,8 +14,7 @@
   "sport_id",
   "events_count",
   "events_count_live",
-  "is_popular",
-  "sport_name"
+  "is_popular"
  ],
  "fields": [
   {
@@ -62,11 +61,6 @@
    "fieldname": "is_popular",
    "fieldtype": "Data",
    "label": "IS_POPULAR"
-  },
-  {
-   "fieldname": "sport_name",
-   "fieldtype": "Data",
-   "label": "SPORT_NAME"
   }
  ],
  "has_web_view": 1,
@@ -74,10 +68,10 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2022-10-26 10:15:01.516320",
+ "modified": "2022-11-07 08:52:29.211833",
  "modified_by": "Administrator",
  "module": "News Management",
- "name": "All Sports",
+ "name": "Flash Teams",
  "nsm_parent_field": "parent_blog_category",
  "owner": "Administrator",
  "permissions": [
