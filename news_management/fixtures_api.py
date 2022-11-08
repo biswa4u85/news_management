@@ -138,6 +138,7 @@ def fetchEvents():
                                 'tournament_id': season['tournament_id'],
                                 'date': startTime,
                                 'start_time': startTime,
+                                'events_details': json.dumps(item),
                             })
                         else:
                             addData = frappe.new_doc(docType)
@@ -146,6 +147,7 @@ def fetchEvents():
                             addData.tournament_id = season['tournament_id']
                             addData.date = startTime
                             addData.start_time = startTime
+                            addData.events_details = json.dumps(item)
                             addData.insert()
             else:
                 frappe.msgprint('No Records Found')
