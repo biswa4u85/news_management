@@ -3,7 +3,7 @@
  "allow_guest_to_view": 1,
  "allow_import": 1,
  "allow_rename": 1,
- "creation": "2022-11-08 20:09:54.674200",
+ "creation": "2022-11-07 09:54:49.349163",
  "doctype": "DocType",
  "document_type": "Setup",
  "engine": "InnoDB",
@@ -11,7 +11,10 @@
   "title",
   "published",
   "route",
-  "season_id"
+  "status",
+  "season_id",
+  "date",
+  "start_time"
  ],
  "fields": [
   {
@@ -38,13 +41,30 @@
    "unique": 1
   },
   {
+   "allow_in_quick_entry": 1,
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Active\nInactive",
+   "reqd": 1
+  },
+  {
    "fieldname": "season_id",
    "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "SEASON_ID",
    "options": "Flash Seasons",
    "reqd": 1
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "DATE"
+  },
+  {
+   "fieldname": "start_time",
+   "fieldtype": "Datetime",
+   "label": "START_TIME"
   }
  ],
  "has_web_view": 1,
@@ -52,10 +72,10 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2022-11-08 20:10:40.091594",
+ "modified": "2022-11-08 22:08:34.929347",
  "modified_by": "Administrator",
  "module": "News Management",
- "name": "Flash Fixtures",
+ "name": "Flash Events",
  "nsm_parent_field": "parent_blog_category",
  "owner": "Administrator",
  "permissions": [

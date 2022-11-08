@@ -4,5 +4,5 @@
 # import frappe
 import unittest
 
-class TestFlashFixtures(unittest.TestCase):
+class TestFlashEvents(unittest.TestCase):
 	pass
