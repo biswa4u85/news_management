@@ -9,9 +9,9 @@ import datetime
 # Tournaments
 @frappe.whitelist(allow_guest=True)
 def fetchTournaments():
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     # Tournaments
     urlTournaments = apiUrl + "/tournaments/stages?locale=en_INT&sport_id=13"
@@ -54,9 +54,9 @@ def fetchTournaments():
 # Seasons
 @frappe.whitelist(allow_guest=True)
 def fetchSeasons():
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     tournaments = frappe.db.get_list('Flash Tournaments', pluck='title')
     if (tournaments):
@@ -104,9 +104,9 @@ def fetchSeasons():
 # Events
 @frappe.whitelist(allow_guest=True)
 def fetchEvents():
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     seasons = frappe.db.get_list('Flash Seasons', filters={}, fields=[
                                  'title', 'tournament_id'])
@@ -127,8 +127,12 @@ def fetchEvents():
                 data = response.json()
                 docType = "Flash Events"
                 for event in data['DATA']:
-                    for item in event['EVENTS']:
-                        startTime = datetime.datetime.fromtimestamp(item['START_TIME'])
+                    events = event['EVENTS']
+                    del event['EVENTS']
+                    tournament = event
+                    for item in events:
+                        startTime = datetime.datetime.fromtimestamp(
+                            item['START_TIME'])
                         isExit = frappe.db.exists(
                             docType, {"title": item['EVENT_ID']})
                         if (isExit):
@@ -138,7 +142,10 @@ def fetchEvents():
                                 'tournament_id': season['tournament_id'],
                                 'date': startTime,
                                 'start_time': startTime,
-                                'events_details': json.dumps(item),
+                                'stage_type': item['STAGE_TYPE'],
+                                'tournament_name': tournament['NAME'],
+                                'event_details': json.dumps(item),
+                                'tournament_details': json.dumps(tournament),
                             })
                         else:
                             addData = frappe.new_doc(docType)
@@ -147,20 +154,23 @@ def fetchEvents():
                             addData.tournament_id = season['tournament_id']
                             addData.date = startTime
                             addData.start_time = startTime
-                            addData.events_details = json.dumps(item)
+                            addData.stage_type = item['STAGE_TYPE']
+                            addData.tournament_name = tournament['NAME']
+                            addData.event_details = json.dumps(item)
+                            addData.tournament_details = json.dumps(tournament)
                             addData.insert()
             else:
                 frappe.msgprint('No Records Found')
-            frappe.msgprint('All Seasons are Updated Successfully')
+            frappe.msgprint('All Events are Updated Successfully')
     else:
         frappe.msgprint('No Records Found')
 
 
 @frappe.whitelist(allow_guest=True)
 def fetchMultiSearch(query):
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     # Series
     url = apiUrl + "/search/multi-search?locale=en_INT&query=" + query
@@ -179,9 +189,9 @@ def fetchMultiSearch(query):
 
 @frappe.whitelist(allow_guest=True)
 def fetchRankings():
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     # Series
     url = apiUrl + "/rankings/list?locale=en_INT&sport_id=13"
@@ -216,9 +226,9 @@ def fetchRankings():
 
 @frappe.whitelist(allow_guest=True)
 def fetchRankingDetails(rankingId):
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     # Series
     url = apiUrl + "/rankings/data?locale=en_INT&ranking_id=" + rankingId
@@ -237,9 +247,9 @@ def fetchRankingDetails(rankingId):
 
 @frappe.whitelist(allow_guest=True)
 def fetchSports():
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     # Series
     url = apiUrl + "/sports/list?locale=en_INT&timezone=-4"
@@ -274,9 +284,9 @@ def fetchSports():
 
 @frappe.whitelist(allow_guest=True)
 def fetchSportsEventsCount():
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     # Series
     url = apiUrl + "/sports/events-count?locale=en_INT&timezone=-4"
@@ -316,9 +326,9 @@ def fetchSportsEventsCount():
 
 @frappe.whitelist(allow_guest=True)
 def fetchEventsDetails(query):
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     url = apiUrl + "/events/data?locale=en_INT&event_id=" + query
     payload = {}
@@ -335,9 +345,9 @@ def fetchEventsDetails(query):
 
 @frappe.whitelist(allow_guest=True)
 def fetchDataSeries():
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     # Series
     url = apiUrl + "/series"
@@ -379,9 +389,9 @@ def fetchDataSeries():
 
 @frappe.whitelist(allow_guest=True)
 def fetchDataFixtures():
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     # Fixtures
     url = apiUrl + "/fixtures"
@@ -507,9 +517,9 @@ def fetchDataFixtures():
 
 @frappe.whitelist(allow_guest=True)
 def getSportsData(query):
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     url = apiUrl + "/sports/" + query
     payload = {}
@@ -525,9 +535,9 @@ def getSportsData(query):
 
 @frappe.whitelist(allow_guest=True)
 def getEventsData(query):
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     url = apiUrl + "/events/" + query
     payload = {}
@@ -543,9 +553,9 @@ def getEventsData(query):
 
 @frappe.whitelist(allow_guest=True)
 def getTeamsData(query):
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     url = apiUrl + "/teams/" + query
     payload = {}
@@ -561,9 +571,9 @@ def getTeamsData(query):
 
 @frappe.whitelist(allow_guest=True)
 def getTournamentsData(query):
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     url = apiUrl + "/tournaments/" + query
     payload = {}

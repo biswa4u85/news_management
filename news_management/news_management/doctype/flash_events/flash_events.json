@@ -15,7 +15,12 @@
   "season_id",
   "date",
   "start_time",
-  "events_details"
+  "event_details",
+  "tournament_details",
+  "stage_type",
+  "result",
+  "tournament_name",
+  "tournament_id"
  ],
  "fields": [
   {
@@ -60,6 +65,8 @@
   {
    "fieldname": "date",
    "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "DATE"
   },
   {
@@ -68,9 +75,37 @@
    "label": "START_TIME"
   },
   {
-   "fieldname": "events_details",
+   "fieldname": "event_details",
    "fieldtype": "Small Text",
-   "label": "EVENTS DETAILS"
+   "label": "Event Details"
+  },
+  {
+   "fieldname": "tournament_details",
+   "fieldtype": "Small Text",
+   "label": "Tournament Details"
+  },
+  {
+   "fieldname": "stage_type",
+   "fieldtype": "Data",
+   "label": "STAGE_TYPE"
+  },
+  {
+   "fieldname": "result",
+   "fieldtype": "Data",
+   "label": "Result"
+  },
+  {
+   "fieldname": "tournament_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tournament Name"
+  },
+  {
+   "fieldname": "tournament_id",
+   "fieldtype": "Link",
+   "label": "Tournament Id",
+   "options": "Flash Tournaments"
   }
  ],
  "has_web_view": 1,
@@ -78,7 +113,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2022-11-08 22:34:23.846804",
+ "modified": "2022-11-09 04:51:10.610520",
  "modified_by": "Administrator",
  "module": "News Management",
  "name": "Flash Events",

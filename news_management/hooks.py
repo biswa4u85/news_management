@@ -113,11 +113,14 @@ website_route_rules = [
 # Scheduled Tasks
 # ---------------
 scheduler_events = {
-    "daily": [
+    "monthly": [
         "news_management.fixtures_api.fetchTournaments"
     ],
-    "daily": [
+    "weekly": [
         "news_management.fixtures_api.fetchSeasons"
+    ],
+    "daily": [
+        "news_management.fixtures_api.fetchEvents"
     ],
     # "cron": {
     #     "0 8 * * *": [

@@ -4,5 +4,5 @@
 # import frappe
 import unittest
 
-class TestLiveScoreFixtures(unittest.TestCase):
+class TestFlashCredentials(unittest.TestCase):
 	pass
