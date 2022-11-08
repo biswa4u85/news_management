@@ -6,6 +6,101 @@ import datetime
 # frappe.msgprint(str(data))
 
 
+# Tournaments
+@frappe.whitelist(allow_guest=True)
+def fetchTournaments():
+    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
+    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
+    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+
+    # Tournaments
+    urlTournaments = apiUrl + "/tournaments/stages?locale=en_INT&sport_id=13"
+    payload = {}
+    headers = {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': apiHost
+    }
+    response = requests.request(
+        "GET", urlTournaments, headers=headers, data=payload)
+    if (response.status_code == 200):
+        data = response.json()
+        docType = "Flash Tournaments"
+        for item in data['DATA']:
+            isExit = frappe.db.exists(docType, {"title": item['STAGE_ID']})
+            if (isExit):
+                frappe.db.set_value(docType, isExit, {
+                    "title": item['STAGE_ID'],
+                    'sport_id': item['SPORT_ID'],
+                    'country_id': item['COUNTRY_ID'],
+                    'country_name': item['COUNTRY_NAME'],
+                    'tournament_name': item['LEAGUE_NAME'],
+                    'tournament_image': item['TOURNAMENT_IMAGE'],
+                })
+            else:
+                addData = frappe.new_doc(docType)
+                addData.title = item['STAGE_ID']
+                addData.sport_id = item['SPORT_ID']
+                addData.country_id = item['COUNTRY_ID']
+                addData.country_name = item['COUNTRY_NAME']
+                addData.tournament_name = item['LEAGUE_NAME']
+                addData.tournament_image = item['TOURNAMENT_IMAGE']
+                addData.insert()
+        frappe.msgprint('Tournaments are Updated Successfully')
+    else:
+        frappe.msgprint('No Records Found')
+
+
+# Seasons
+@frappe.whitelist(allow_guest=True)
+def fetchSeasons():
+    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
+    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
+    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
+
+    tournaments = frappe.db.get_list('Flash Tournaments', pluck='title')
+    if (tournaments):
+        for tournament in tournaments:
+
+            # Seasons
+            url = apiUrl + "/tournaments/stages/data?locale=en_INT&tournament_stage_id=" + tournament
+            payload = {}
+            headers = {
+                'Content-Type': 'application/json',
+                'X-RapidAPI-Key': apiKey,
+                'X-RapidAPI-Host': apiHost
+            }
+            response = requests.request(
+                "GET", url, headers=headers, data=payload)
+            if (response.status_code == 200):
+                data = response.json()
+                docType = "Flash Seasons"
+                for item in data['DATA']['SEASONS']:
+                    isExit = frappe.db.exists(
+                        docType, {"title": item['SEASON_TOURNAMENT_STAGE_ID']})
+                    if (isExit):
+                        frappe.db.set_value(docType, isExit, {
+                            "title": item['SEASON_TOURNAMENT_STAGE_ID'],
+                            'season_name': item['SEASON_NAME'],
+                            'season_id': item['SEASON_ID'],
+                            'season_standings_type': item['SEASON_STANDINGS_TYPE'],
+                            'tournament_id': tournament,
+                        })
+                    else:
+                        addData = frappe.new_doc(docType)
+                        addData.title = item['SEASON_TOURNAMENT_STAGE_ID']
+                        addData.season_name = item['SEASON_NAME']
+                        addData.season_id = item['SEASON_ID']
+                        addData.season_standings_type = item['SEASON_STANDINGS_TYPE']
+                        addData.tournament_id = tournament
+                        addData.insert()
+                frappe.msgprint('All Seasons are Updated Successfully')
+            else:
+                frappe.msgprint('No Records Found')
+    else:
+        frappe.msgprint('No Records Found')
+
+
 @frappe.whitelist(allow_guest=True)
 def fetchMultiSearch(query):
     apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
@@ -231,56 +326,6 @@ def fetchEventsDetails(query):
     if (response.status_code == 200):
         data = response.json()
         return data
-
-
-@frappe.whitelist(allow_guest=True)
-def fetchTournaments():
-    apiHost = frappe.db.get_single_value('Live Score Details', 'api_host')
-    apiKey = frappe.db.get_single_value('Live Score Details', 'api_key')
-    apiUrl = frappe.db.get_single_value('Live Score Details', 'api_url')
-
-    # Series
-    url = apiUrl + "/tournaments/list?locale=en_INT&sport_id=13"
-    payload = {}
-    headers = {
-        'Content-Type': 'application/json',
-        'X-RapidAPI-Key': apiKey,
-        'X-RapidAPI-Host': apiHost
-    }
-    response = requests.request("GET", url, headers=headers, data=payload)
-    if (response.status_code == 200):
-        data = response.json()
-        docType = "Flash Tournaments"
-        for item in data['DATA']:
-            isExit = frappe.db.exists(
-                docType, {"template_id": item['TEMPLATE_ID']})
-            if (isExit):
-                frappe.db.set_value(docType, isExit, {
-                    "title": item['TEMPLATE_ID'],
-                    "tournament_name": item['LEAGUE_NAME'],
-                    'country_name': item['COUNTRY_NAME'],
-                    'country_id': item['COUNTRY_ID'],
-                    'actual_tournament_season_id': item['ACTUAL_TOURNAMENT_SEASON_ID'],
-                    'group_id': item['GROUP_ID'],
-                    'season_id': item['SEASON_ID'],
-                    'template_id': item['TEMPLATE_ID'],
-                    'stages': json.dumps(item['STAGES']),
-                })
-            else:
-                addData = frappe.new_doc(docType)
-                addData.title = item['TEMPLATE_ID']
-                addData.tournament_name = item['LEAGUE_NAME']
-                addData.country_name = item['COUNTRY_NAME']
-                addData.country_id = item['COUNTRY_ID']
-                addData.actual_tournament_season_id = item['ACTUAL_TOURNAMENT_SEASON_ID']
-                addData.group_id = item['GROUP_ID']
-                addData.season_id = item['SEASON_ID']
-                addData.template_id = item['TEMPLATE_ID']
-                addData.stages = json.dumps(item['STAGES'])
-                addData.insert()
-        frappe.msgprint('Events are Updated Successfully')
-    else:
-        frappe.msgprint('No Records Found')
 
 
 @frappe.whitelist(allow_guest=True)

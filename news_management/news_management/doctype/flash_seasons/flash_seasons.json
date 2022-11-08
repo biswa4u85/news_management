@@ -3,7 +3,7 @@
  "allow_guest_to_view": 1,
  "allow_import": 1,
  "allow_rename": 1,
- "creation": "2022-10-25 10:57:19.911900",
+ "creation": "2022-11-08 19:55:39.841669",
  "doctype": "DocType",
  "document_type": "Setup",
  "engine": "InnoDB",
@@ -11,17 +11,18 @@
   "title",
   "published",
   "route",
-  "sport_id",
-  "country_id",
-  "country_name",
-  "tournament_image",
-  "tournament_name"
+  "season_name",
+  "season_id",
+  "season_standings_type",
+  "tournament_id"
  ],
  "fields": [
   {
    "fieldname": "title",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Title",
+   "no_copy": 1,
    "reqd": 1
   },
   {
@@ -40,33 +41,30 @@
    "unique": 1
   },
   {
-   "fieldname": "sport_id",
-   "fieldtype": "Data",
-   "label": "SPORT_ID"
-  },
-  {
-   "fieldname": "country_id",
-   "fieldtype": "Data",
-   "label": "COUNTRY_ID"
-  },
-  {
-   "fieldname": "country_name",
+   "fieldname": "season_name",
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "COUNTRY_NAME"
+   "label": "SEASON_NAME"
   },
   {
-   "fieldname": "tournament_image",
+   "fieldname": "season_id",
    "fieldtype": "Data",
-   "label": "TOURNAMENT_IMAGE"
+   "label": "SEASON_ID"
   },
   {
-   "fieldname": "tournament_name",
+   "fieldname": "season_standings_type",
    "fieldtype": "Data",
+   "label": "SEASON_STANDINGS_TYPE"
+  },
+  {
+   "fieldname": "tournament_id",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "TOURNAMENT_NAME"
+   "label": "TOURNAMENT_ID",
+   "options": "Flash Tournaments",
+   "reqd": 1
   }
  ],
  "has_web_view": 1,
@@ -74,10 +72,10 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2022-11-08 18:48:54.310653",
+ "modified": "2022-11-08 20:08:45.992077",
  "modified_by": "Administrator",
  "module": "News Management",
- "name": "Flash Tournaments",
+ "name": "Flash Seasons",
  "nsm_parent_field": "parent_blog_category",
  "owner": "Administrator",
  "permissions": [

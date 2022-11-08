@@ -3,7 +3,7 @@
  "allow_guest_to_view": 1,
  "allow_import": 1,
  "allow_rename": 1,
- "creation": "2022-10-25 10:57:19.911900",
+ "creation": "2022-11-08 20:09:54.674200",
  "doctype": "DocType",
  "document_type": "Setup",
  "engine": "InnoDB",
@@ -11,17 +11,15 @@
   "title",
   "published",
   "route",
-  "sport_id",
-  "country_id",
-  "country_name",
-  "tournament_image",
-  "tournament_name"
+  "season_id"
  ],
  "fields": [
   {
    "fieldname": "title",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Title",
+   "no_copy": 1,
    "reqd": 1
   },
   {
@@ -40,33 +38,13 @@
    "unique": 1
   },
   {
-   "fieldname": "sport_id",
-   "fieldtype": "Data",
-   "label": "SPORT_ID"
-  },
-  {
-   "fieldname": "country_id",
-   "fieldtype": "Data",
-   "label": "COUNTRY_ID"
-  },
-  {
-   "fieldname": "country_name",
-   "fieldtype": "Data",
+   "fieldname": "season_id",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "COUNTRY_NAME"
-  },
-  {
-   "fieldname": "tournament_image",
-   "fieldtype": "Data",
-   "label": "TOURNAMENT_IMAGE"
-  },
-  {
-   "fieldname": "tournament_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "TOURNAMENT_NAME"
+   "label": "SEASON_ID",
+   "options": "Flash Seasons",
+   "reqd": 1
   }
  ],
  "has_web_view": 1,
@@ -74,10 +52,10 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2022-11-08 18:48:54.310653",
+ "modified": "2022-11-08 20:10:40.091594",
  "modified_by": "Administrator",
  "module": "News Management",
- "name": "Flash Tournaments",
+ "name": "Flash Fixtures",
  "nsm_parent_field": "parent_blog_category",
  "owner": "Administrator",
  "permissions": [
