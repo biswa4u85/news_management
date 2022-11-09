@@ -19,8 +19,7 @@
   "tournament_details",
   "stage_type",
   "result",
-  "tournament_name",
-  "tournament_id"
+  "tournament_name"
  ],
  "fields": [
   {
@@ -59,8 +58,7 @@
    "fieldname": "season_id",
    "fieldtype": "Link",
    "label": "SEASON_ID",
-   "options": "Flash Seasons",
-   "reqd": 1
+   "options": "Flash Seasons"
   },
   {
    "fieldname": "date",
@@ -100,12 +98,6 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tournament Name"
-  },
-  {
-   "fieldname": "tournament_id",
-   "fieldtype": "Link",
-   "label": "Tournament Id",
-   "options": "Flash Tournaments"
   }
  ],
  "has_web_view": 1,
@@ -113,7 +105,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2022-11-09 04:51:10.610520",
+ "modified": "2022-11-09 05:49:13.781721",
  "modified_by": "Administrator",
  "module": "News Management",
  "name": "Flash Events",

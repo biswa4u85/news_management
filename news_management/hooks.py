@@ -122,6 +122,9 @@ scheduler_events = {
     "daily": [
         "news_management.fixtures_api.fetchEvents"
     ],
+    "hourly": [
+        "news_management.fixtures_api.fetchEventsHourly"
+    ],
     # "cron": {
     #     "0 8 * * *": [
     #         "news_management.fixtures_api.fetchDataSeries"
