@@ -12,14 +12,15 @@
   "published",
   "route",
   "status",
-  "season_id",
   "date",
   "start_time",
   "event_details",
   "tournament_details",
   "stage_type",
   "result",
-  "tournament_name"
+  "tournament_name",
+  "tournament_id",
+  "season_id"
  ],
  "fields": [
   {
@@ -53,12 +54,6 @@
    "label": "Status",
    "options": "Active\nInactive",
    "reqd": 1
-  },
-  {
-   "fieldname": "season_id",
-   "fieldtype": "Link",
-   "label": "SEASON_ID",
-   "options": "Flash Seasons"
   },
   {
    "fieldname": "date",
@@ -98,6 +93,16 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tournament Name"
+  },
+  {
+   "fieldname": "tournament_id",
+   "fieldtype": "Data",
+   "label": "Tournament Id"
+  },
+  {
+   "fieldname": "season_id",
+   "fieldtype": "Data",
+   "label": "Season Id"
   }
  ],
  "has_web_view": 1,
@@ -105,7 +110,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2022-11-09 05:49:13.781721",
+ "modified": "2022-11-09 06:18:21.475078",
  "modified_by": "Administrator",
  "module": "News Management",
  "name": "Flash Events",
