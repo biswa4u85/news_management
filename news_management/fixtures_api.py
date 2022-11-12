@@ -110,60 +110,65 @@ def fetchEvents():
 
     seasons = frappe.db.get_list('Flash Seasons', filters={}, fields=[
                                  'title', 'tournament_id'])
+    oldevents = frappe.db.get_list('Flash Events', filters={}, fields=[
+        'season_id', 'tournament_id'])
+
     if (seasons):
         for season in seasons:
-            # Events
-            url = apiUrl + "/tournaments/fixtures?locale=en_INT&tournament_stage_id=" + \
-                season['title']
-            payload = {}
-            headers = {
-                'Content-Type': 'application/json',
-                'X-RapidAPI-Key': apiKey,
-                'X-RapidAPI-Host': apiHost
-            }
-            response = requests.request(
-                "GET", url, headers=headers, data=payload)
-            if (response.status_code == 200):
-                data = response.json()
-                docType = "Flash Events"
-                for event in data['DATA']:
-                    events = event['EVENTS']
-                    del event['EVENTS']
-                    tournament = event
-                    for item in events:
-                        startTime = datetime.datetime.fromtimestamp(
-                            item['START_TIME'])
-                        isExit = frappe.db.exists(
-                            docType, {"title": item['EVENT_ID']})
-                        if (isExit):
-                            frappe.db.set_value(docType, isExit, {
-                                "title": item['EVENT_ID'],
-                                'season_id': season['title'],
-                                'tournament_id': season['tournament_id'],
-                                'date': startTime,
-                                'start_time': startTime,
-                                'stage_type': item['STAGE_TYPE'],
-                                'tournament_name': tournament['NAME'],
-                                'event_details': json.dumps(item),
-                                'tournament_details': json.dumps(tournament),
-                            })
-                        else:
-                            addData = frappe.new_doc(docType)
-                            addData.title = item['EVENT_ID']
-                            addData.season_id = season['title']
-                            addData.tournament_id = season['tournament_id']
-                            addData.date = startTime
-                            addData.start_time = startTime
-                            addData.stage_type = item['STAGE_TYPE']
-                            addData.tournament_name = tournament['NAME']
-                            addData.event_details = json.dumps(item)
-                            addData.tournament_details = json.dumps(tournament)
-                            addData.insert()
-            else:
-                frappe.msgprint('No Records Found')
+            if any(obj['season_id'] != season['title'] for obj in oldevents):
+                # Events
+                url = apiUrl + "/tournaments/fixtures?locale=en_INT&tournament_stage_id=" + \
+                    season['title']
+                payload = {}
+                headers = {
+                    'Content-Type': 'application/json',
+                    'X-RapidAPI-Key': apiKey,
+                    'X-RapidAPI-Host': apiHost
+                }
+                response = requests.request(
+                    "GET", url, headers=headers, data=payload)
+                if (response.status_code == 200):
+                    data = response.json()
+                    docType = "Flash Events"
+                    for event in data['DATA']:
+                        events = event['EVENTS']
+                        del event['EVENTS']
+                        tournament = event
+                        for item in events:
+                            startTime = datetime.datetime.fromtimestamp(
+                                item['START_TIME'])
+                            isExit = frappe.db.exists(
+                                docType, {"title": item['EVENT_ID']})
+                            if (isExit):
+                                frappe.db.set_value(docType, isExit, {
+                                    "title": item['EVENT_ID'],
+                                    'season_id': season['title'],
+                                    'tournament_id': season['tournament_id'],
+                                    'date': startTime,
+                                    'start_time': startTime,
+                                    'stage_type': item['STAGE_TYPE'],
+                                    'tournament_name': tournament['NAME'],
+                                    'event_details': json.dumps(item),
+                                    'tournament_details': json.dumps(tournament),
+                                })
+                            else:
+                                addData = frappe.new_doc(docType)
+                                addData.title = item['EVENT_ID']
+                                addData.season_id = season['title']
+                                addData.tournament_id = season['tournament_id']
+                                addData.date = startTime
+                                addData.start_time = startTime
+                                addData.stage_type = item['STAGE_TYPE']
+                                addData.tournament_name = tournament['NAME']
+                                addData.event_details = json.dumps(item)
+                                addData.tournament_details = json.dumps(tournament)
+                                addData.insert()
+                else:
+                    frappe.msgprint('No Records Found')
         frappe.msgprint('All Events are Updated Successfully')
     else:
         frappe.msgprint('No Records Found')
+
 
 @frappe.whitelist(allow_guest=True)
 def fetchEventsHourly():
@@ -217,85 +222,6 @@ def fetchEventsHourly():
                     addData.tournament_details = json.dumps(tournament)
                     addData.insert()
         frappe.msgprint('Events are Updated Successfully')
-    else:
-        frappe.msgprint('No Records Found')
-
-
-@frappe.whitelist(allow_guest=True)
-def fetchMultiSearch(query):
-    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
-    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
-    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
-
-    # Series
-    url = apiUrl + "/search/multi-search?locale=en_INT&query=" + query
-    payload = {}
-    headers = {
-        "X-RapidAPI-Key": apiKey,
-        "X-RapidAPI-Host": apiHost
-    }
-    response = requests.request(
-        "GET", url, headers=headers, data=payload)
-    if (response.status_code == 200):
-        return response.json()
-    else:
-        frappe.msgprint('No Records Found')
-
-
-@frappe.whitelist(allow_guest=True)
-def fetchRankings():
-    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
-    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
-    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
-
-    # Series
-    url = apiUrl + "/rankings/list?locale=en_INT&sport_id=13"
-    payload = {}
-    headers = {
-        'Content-Type': 'application/json',
-        'X-RapidAPI-Key': apiKey,
-        'X-RapidAPI-Host': apiHost
-    }
-    response = requests.request("GET", url, headers=headers, data=payload)
-    if (response.status_code == 200):
-        data = response.json()
-        frappe.msgprint(str(data))
-        docType = "Flash Rankings"
-        for item in data['DATA']:
-            isExit = frappe.db.exists(
-                docType, {"sport_id": item['ID']})
-            if (isExit):
-                frappe.db.set_value(docType, isExit, {
-                    'sport_id': item['ID'],
-                    "title": item['NAME'],
-                })
-            else:
-                addData = frappe.new_doc(docType)
-                addData.sport_id = item['ID']
-                addData.title = item['NAME']
-                addData.insert()
-        frappe.msgprint('Sports are Updated Successfully')
-    else:
-        frappe.msgprint('No Records Found')
-
-
-@frappe.whitelist(allow_guest=True)
-def fetchRankingDetails(rankingId):
-    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
-    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
-    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
-
-    # Series
-    url = apiUrl + "/rankings/data?locale=en_INT&ranking_id=" + rankingId
-    payload = {}
-    headers = {
-        "X-RapidAPI-Key": apiKey,
-        "X-RapidAPI-Host": apiHost
-    }
-    response = requests.request(
-        "GET", url, headers=headers, data=payload)
-    if (response.status_code == 200):
-        return response.json()
     else:
         frappe.msgprint('No Records Found')
 
@@ -570,6 +496,89 @@ def fetchDataFixtures():
         frappe.msgprint('Fixtures Updated Successfully')
 
 
+# Search
+@frappe.whitelist(allow_guest=True)
+def fetchMultiSearch(query):
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
+
+    # Series
+    url = apiUrl + "/search/multi-search?locale=en_INT&query=" + query
+    payload = {}
+    headers = {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": apiHost
+    }
+    response = requests.request(
+        "GET", url, headers=headers, data=payload)
+    if (response.status_code == 200):
+        return response.json()
+    else:
+        frappe.msgprint('No Records Found')
+
+
+# Rankings
+@frappe.whitelist(allow_guest=True)
+def fetchRankings():
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
+
+    # Series
+    url = apiUrl + "/rankings/list?locale=en_INT&sport_id=13"
+    payload = {}
+    headers = {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': apiHost
+    }
+    response = requests.request("GET", url, headers=headers, data=payload)
+    if (response.status_code == 200):
+        data = response.json()
+        frappe.msgprint(str(data))
+        docType = "Flash Rankings"
+        for item in data['DATA']:
+            isExit = frappe.db.exists(
+                docType, {"sport_id": item['ID']})
+            if (isExit):
+                frappe.db.set_value(docType, isExit, {
+                    'sport_id': item['ID'],
+                    "title": item['NAME'],
+                })
+            else:
+                addData = frappe.new_doc(docType)
+                addData.sport_id = item['ID']
+                addData.title = item['NAME']
+                addData.insert()
+        frappe.msgprint('Sports are Updated Successfully')
+    else:
+        frappe.msgprint('No Records Found')
+
+
+# Rankings Details
+@frappe.whitelist(allow_guest=True)
+def fetchRankingDetails(rankingId):
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
+
+    # Series
+    url = apiUrl + "/rankings/data?locale=en_INT&ranking_id=" + rankingId
+    payload = {}
+    headers = {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": apiHost
+    }
+    response = requests.request(
+        "GET", url, headers=headers, data=payload)
+    if (response.status_code == 200):
+        return response.json()
+    else:
+        frappe.msgprint('No Records Found')
+
+
+# Sports
 @frappe.whitelist(allow_guest=True)
 def getSportsData(query):
     apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
@@ -588,6 +597,7 @@ def getSportsData(query):
         return response.json()
 
 
+# Events
 @frappe.whitelist(allow_guest=True)
 def getEventsData(query):
     apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
@@ -606,6 +616,7 @@ def getEventsData(query):
         return response.json()
 
 
+# Teams
 @frappe.whitelist(allow_guest=True)
 def getTeamsData(query):
     apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
@@ -624,6 +635,7 @@ def getTeamsData(query):
         return response.json()
 
 
+# Tournaments
 @frappe.whitelist(allow_guest=True)
 def getTournamentsData(query):
     apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
@@ -631,6 +643,25 @@ def getTournamentsData(query):
     apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
 
     url = apiUrl + "/tournaments/" + query
+    payload = {}
+    headers = {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": apiHost
+    }
+    response = requests.request(
+        "GET", url, headers=headers, data=payload)
+    if (response.status_code == 200):
+        return response.json()
+
+
+# Players
+@frappe.whitelist(allow_guest=True)
+def getPlayersData(query):
+    apiHost = frappe.db.get_single_value('Flash Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Flash Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Flash Credentials', 'api_url')
+
+    url = apiUrl + "/players/" + query
     payload = {}
     headers = {
         "X-RapidAPI-Key": apiKey,
