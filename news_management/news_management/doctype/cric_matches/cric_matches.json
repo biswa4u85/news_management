@@ -1,0 +1,154 @@
+{
+ "actions": [],
+ "allow_guest_to_view": 1,
+ "allow_import": 1,
+ "allow_rename": 1,
+ "creation": "2022-11-16 15:29:35.988615",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "published",
+  "route",
+  "startdt",
+  "enddt",
+  "series",
+  "match_desc",
+  "match_format",
+  "team1",
+  "team2",
+  "venue",
+  "result",
+  "sub_satus",
+  "state",
+  "score"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "no_copy": 1,
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "published",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Published"
+  },
+  {
+   "depends_on": "published",
+   "fieldname": "route",
+   "fieldtype": "Data",
+   "label": "Route",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "startdt",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "enddt",
+   "fieldtype": "Datetime",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "series",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Series",
+   "options": "Cric Series"
+  },
+  {
+   "fieldname": "match_desc",
+   "fieldtype": "Data",
+   "label": "Match Desc"
+  },
+  {
+   "fieldname": "match_format",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Match Format"
+  },
+  {
+   "fieldname": "team1",
+   "fieldtype": "Link",
+   "label": "Team1",
+   "options": "Cric Teams"
+  },
+  {
+   "fieldname": "team2",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Team2",
+   "options": "Cric Teams"
+  },
+  {
+   "fieldname": "venue",
+   "fieldtype": "Small Text",
+   "label": "Venue"
+  },
+  {
+   "fieldname": "result",
+   "fieldtype": "Data",
+   "label": "Result"
+  },
+  {
+   "fieldname": "sub_satus",
+   "fieldtype": "Data",
+   "label": "Sub Satus"
+  },
+  {
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "label": "State"
+  },
+  {
+   "fieldname": "score",
+   "fieldtype": "Small Text",
+   "label": "Score"
+  }
+ ],
+ "has_web_view": 1,
+ "icon": "fa fa-tag",
+ "index_web_pages_for_search": 1,
+ "is_published_field": "published",
+ "links": [],
+ "modified": "2022-11-19 02:06:45.753046",
+ "modified_by": "Administrator",
+ "module": "News Management",
+ "name": "Cric Matches",
+ "nsm_parent_field": "parent_blog_category",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Website Manager",
+   "set_user_permissions": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Blogger"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "title",
+ "track_changes": 1
+}

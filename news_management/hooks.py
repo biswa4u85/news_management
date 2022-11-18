@@ -113,6 +113,15 @@ website_route_rules = [
 # Scheduled Tasks
 # ---------------
 scheduler_events = {
+    "daily": [
+        "news_management.cric_api.fetchSeries"
+    ],
+    "daily": [
+        "news_management.cric_api.fetchSeriesArchives"
+    ],
+    "hourly": [
+        "news_management.cric_api.fetchMatches"
+    ],
     "monthly": [
         "news_management.fixtures_api.fetchTournaments"
     ],

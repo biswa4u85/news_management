@@ -1,0 +1,124 @@
+{
+ "actions": [],
+ "allow_guest_to_view": 1,
+ "allow_import": 1,
+ "allow_rename": 1,
+ "creation": "2022-11-16 12:09:03.229860",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "published",
+  "route",
+  "type",
+  "date",
+  "series_name",
+  "startdt",
+  "enddt",
+  "status",
+  "home_country"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "no_copy": 1,
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "published",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Published"
+  },
+  {
+   "depends_on": "published",
+   "fieldname": "route",
+   "fieldtype": "Data",
+   "label": "Route",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Type",
+   "options": "international\ndomestic\nleague\ndomestic\nwomen"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Date"
+  },
+  {
+   "fieldname": "startdt",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "enddt",
+   "fieldtype": "Datetime",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "series_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Series Name"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "Status"
+  },
+  {
+   "fieldname": "home_country",
+   "fieldtype": "Data",
+   "label": "Home Country"
+  }
+ ],
+ "has_web_view": 1,
+ "icon": "fa fa-tag",
+ "index_web_pages_for_search": 1,
+ "is_published_field": "published",
+ "links": [],
+ "modified": "2022-11-19 01:43:09.532053",
+ "modified_by": "Administrator",
+ "module": "News Management",
+ "name": "Cric Series",
+ "nsm_parent_field": "parent_blog_category",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Website Manager",
+   "set_user_permissions": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Blogger"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "title",
+ "track_changes": 1
+}

@@ -161,7 +161,8 @@ def fetchEvents():
                                 addData.stage_type = item['STAGE_TYPE']
                                 addData.tournament_name = tournament['NAME']
                                 addData.event_details = json.dumps(item)
-                                addData.tournament_details = json.dumps(tournament)
+                                addData.tournament_details = json.dumps(
+                                    tournament)
                                 addData.insert()
                 else:
                     frappe.msgprint('No Records Found')
