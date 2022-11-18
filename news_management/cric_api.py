@@ -200,8 +200,8 @@ def fetchMatches():
                         if (isExit) is None:
                             addData = frappe.new_doc(docType)
                             addData.title = str(item['seriesId'])
-                            addData.type = matches['matchType']
-                            addData.series_name = (item['seriesName']).lower()
+                            addData.type = (matches['matchType']).lower()
+                            addData.series_name = item['seriesName']
                             addData.insert()
                 updateMatch(item['matches'], type)
     frappe.msgprint('Matches are Updated Successfully')
