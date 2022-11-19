@@ -362,7 +362,7 @@ def fetchSinglePhotos(imageId):
 def getSeriesList(query):
 
     # Check Data
-    series = frappe.db.get_list('Cric Series', filters={'status': 'open'}, fields=[
+    series = frappe.db.get_list('Cric Series', filters={'status': 'open'}, order_by='startdt asc', fields=[
         'name', 'type', 'series_name', 'startdt', 'date'])
     return series
 
@@ -373,7 +373,7 @@ def getSeriesArchivesList(query):
 
     # Check Data
     archives = frappe.db.get_list('Cric Series', filters={
-                                  'date': query, 'status': 'archives'}, fields=['name', 'type', 'series_name', 'startdt', 'date'])
+                                  'date': query, 'status': 'archives'}, order_by='startdt asc', fields=['name', 'type', 'series_name', 'startdt', 'date'])
     if (len(archives) > 0):
         return archives
     else:
@@ -407,7 +407,7 @@ def getMatchesByDay(query):
                                 'status': 'open'}, fields=['name', 'date', 'type', 'series_name'])
     teams = frappe.db.get_list(
         'Cric Teams', filters={}, fields=['name', 'team_name'])
-    matches = frappe.db.get_list('Cric Matches', filters={"startdt": ['>=', query]}, fields=[
+    matches = frappe.db.get_list('Cric Matches', filters={"startdt": ['>=', query]}, order_by='startdt asc', fields=[
                                  'name', 'type', 'series', 'startdt', 'date', 'team1', 'team2', 'venue', 'match_desc'])
     for match in matches:
         # Team1
@@ -444,7 +444,7 @@ def getMatchesByFilter(query):
                                 'status': 'open'}, fields=['name', 'date', 'type', 'series_name'])
     teams = frappe.db.get_list(
         'Cric Teams', filters={}, fields=['name', 'team_name', 'team_sname'])
-    matches = frappe.db.get_list('Cric Matches', filters={"sub_satus": query}, fields=[
+    matches = frappe.db.get_list('Cric Matches', filters={"sub_satus": query}, order_by='startdt asc', fields=[
                                  'name', 'type', 'series', 'startdt', 'date', 'team1', 'team2', 'venue',  'sub_satus', 'result', 'score', 'match_desc'])
     for match in matches:
         # Team1
@@ -474,18 +474,60 @@ def getMatchesByFilter(query):
     return matches
 
 
+# Home Matches List
+@frappe.whitelist(allow_guest=True)
+def getHomeMatchList(query):
+
+    # Check Data
+    series = frappe.db.get_list('Cric Series', filters={
+                                'status': 'open'}, fields=['name', 'date', 'type', 'series_name'])
+    teams = frappe.db.get_list(
+        'Cric Teams', filters={}, fields=['name', 'team_name', 'team_image', 'team_sname'])
+    today = datetime.date.today()
+    matches = frappe.db.get_list('Cric Matches', filters={"startdt": ['Between',  [query['start'], query['end']]]}, order_by='startdt asc', fields=[
+                                 'name', 'type', 'series', 'startdt', 'date', 'team1', 'team2', 'venue',  'sub_satus', 'result', 'score', 'match_desc'])
+    for match in matches:
+        # Team1
+        filterTeam1 = filter(
+            lambda item: item["name"] == match['team1'], teams)
+        newTeam1 = list(filterTeam1)
+        if (len(newTeam1) > 0):
+            match['team1'] = newTeam1[0]['team_name']
+            match['team1s'] = newTeam1[0]['team_sname']
+            match['team1_image'] = newTeam1[0]['team_image']
+
+        # Team2
+        filterTeam2 = filter(
+            lambda item: item["name"] == match['team2'], teams)
+        newTeam2 = list(filterTeam2)
+        if (len(newTeam2) > 0):
+            match['team2'] = newTeam2[0]['team_name']
+            match['team2s'] = newTeam2[0]['team_sname']
+            match['team2_image'] = newTeam2[0]['team_image']
+
+        # Serie
+        filterSerie = filter(
+            lambda item: item["name"] == match['series'], series)
+        newSerie = list(filterSerie)
+        if (len(newSerie) > 0):
+            match['series_name'] = newSerie[0]['series_name']
+            match['series_type'] = newSerie[0]['type']
+            match['series_date'] = newSerie[0]['date']
+    return matches
+
+
 # Matches By Series List
 @frappe.whitelist(allow_guest=True)
 def getMatchesBySeries(query):
 
     series = frappe.db.get_list('Cric Series', filters={
-        'name': query}, fields=['name', 'date', 'type', 'series_name'])
+        'name': query}, fields=['name', 'date', 'type', 'series_name' ,'startdt', 'enddt'])
     teams = frappe.db.get_list(
         'Cric Teams', filters={}, fields=['name', 'team_name', 'team_sname'])
 
     # Check Data
-    matches = frappe.db.get_list('Cric Matches', filters={"series": query}, fields=[
-                                 'name', 'type', 'series', 'startdt', 'date', 'team1', 'team2', 'venue',  'sub_satus', 'result', 'score', 'match_desc'])
+    matches = frappe.db.get_list('Cric Matches', filters={"series": query}, order_by='startdt asc', fields=[
+                                 'name', 'type', 'series', 'startdt', 'date', 'team1', 'team2', 'venue',  'sub_satus', 'result', 'score', 'match_format', 'match_desc'])
     if (len(matches) == 0):
         matches = updateMatchBySeries(query)
     for match in matches:
@@ -513,4 +555,6 @@ def getMatchesBySeries(query):
             match['series_name'] = newSerie[0]['series_name']
             match['series_type'] = newSerie[0]['type']
             match['series_date'] = newSerie[0]['date']
+            match['series_start'] = newSerie[0]['startdt']
+            match['series_end'] = newSerie[0]['enddt']
     return matches
