@@ -558,3 +558,60 @@ def getMatchesBySeries(query):
             match['series_start'] = newSerie[0]['startdt']
             match['series_end'] = newSerie[0]['enddt']
     return matches
+
+
+# Match Details Highlights
+@frappe.whitelist(allow_guest=True)
+def getHighlights(query):
+    apiHost = frappe.db.get_single_value('Cric Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Cric Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Cric Credentials', 'api_url')
+    headers = {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': apiHost
+    }
+
+    series = None
+    team1 = None
+    team2 = None
+    commentary = None
+    scorecard = None
+    highlights = None
+    facts = None
+    matches = frappe.db.get_list('Cric Matches', filters={"name": query}, order_by='startdt asc', fields=['name',  'title', 'startdt',  'enddt', 'series', 'match_desc',  'match_format', 'team1', 'team2', 'venue', 'result', 'sub_satus', 'state', 'score'])
+    if (len(matches) > 0):
+        series = frappe.db.get_list('Cric Series', filters={'name': matches[0]['series']}, fields=['name', 'title', 'date', 'series_name' ,'startdt', 'enddt', 'status', 'home_country'])
+        team1 = frappe.db.get_list('Cric Teams', filters={'name': matches[0]['team1']}, fields=['name', 'title', 'team_name', 'team_sname', 'image_id', 'country_name', 'type', 'team_image'])
+        team2 = frappe.db.get_list('Cric Teams', filters={'name': matches[0]['team2']}, fields=['name', 'title', 'team_name', 'team_sname', 'image_id', 'country_name', 'type', 'team_image'])
+
+        # Commentary
+        resCommentary = requests.request("GET", (apiUrl + "/mcenter/v1/" + query + "/comm"), headers=headers, data={})
+        if (resCommentary.status_code == 200):
+            commentary = resCommentary.json()
+
+        # Scorecard
+        resScorecard = requests.request("GET", (apiUrl + "/mcenter/v1/" + query + "/scard"), headers=headers, data={})
+        if (resScorecard.status_code == 200):
+            scorecard = resScorecard.json()
+
+        # Highlights
+        resHighlights = requests.request("GET", (apiUrl + "/mcenter/v1/" + query + "/hcomm"), headers=headers, data={})
+        if (resHighlights.status_code == 200):
+            highlights = resHighlights.json()
+
+        # Facts
+        resFacts = requests.request("GET", (apiUrl + "/mcenter/v1/" + query), headers=headers, data={})
+        if (resFacts.status_code == 200):
+            facts = resFacts.json()
+
+    return {
+        "series":series[0] if series else None,
+        "matches":matches[0] if matches else None,
+        "team1":team1[0] if team1 else None,
+        "team2":team2[0] if team2 else None,
+        "commentary":commentary if commentary else None,
+        "scorecard":scorecard if scorecard else None,
+        "highlights":highlights if highlights else None,
+        "facts":facts if facts else None,
+        }
