@@ -326,7 +326,7 @@ def updateMatchBySeries(serieId):
             if 'matchDetailsMap' in item:
                 updateMatch(item['matchDetailsMap']['match'], '')
         return frappe.db.get_list('Cric Matches', filters={"series": serieId}, fields=[
-            'name', 'type', 'series', 'startdt', 'date', 'team1', 'team2', 'venue',  'sub_satus', 'result', 'score', 'match_desc'])
+            'name', 'series', 'startdt',  'team1', 'team2', 'venue',  'sub_satus', 'result', 'score', 'match_desc'])
 
 
 # Single Photos
