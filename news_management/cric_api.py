@@ -408,7 +408,7 @@ def getMatchesByDay(query):
     teams = frappe.db.get_list(
         'Cric Teams', filters={}, fields=['name', 'team_name'])
     matches = frappe.db.get_list('Cric Matches', filters={"startdt": ['>=', query]}, order_by='startdt asc', fields=[
-                                 'name', 'type', 'series', 'startdt', 'date', 'team1', 'team2', 'venue', 'match_desc'])
+                                 'name', 'series', 'startdt', 'date', 'team1', 'team2', 'venue', 'match_desc'])
     for match in matches:
         # Team1
         filterTeam1 = filter(
