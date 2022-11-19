@@ -445,7 +445,7 @@ def getMatchesByFilter(query):
     teams = frappe.db.get_list(
         'Cric Teams', filters={}, fields=['name', 'team_name', 'team_sname'])
     matches = frappe.db.get_list('Cric Matches', filters={"sub_satus": query}, order_by='startdt asc', fields=[
-                                 'name', 'type', 'series', 'startdt', 'date', 'team1', 'team2', 'venue',  'sub_satus', 'result', 'score', 'match_desc'])
+                                 'name', 'series', 'startdt', 'date', 'team1', 'team2', 'venue',  'sub_satus', 'result', 'score', 'match_desc'])
     for match in matches:
         # Team1
         filterTeam1 = filter(
@@ -485,7 +485,7 @@ def getHomeMatchList(query):
         'Cric Teams', filters={}, fields=['name', 'team_name', 'team_image', 'team_sname'])
     today = datetime.date.today()
     matches = frappe.db.get_list('Cric Matches', filters={"startdt": ['Between',  [query['start'], query['end']]]}, order_by='startdt asc', fields=[
-                                 'name', 'type', 'series', 'startdt', 'date', 'team1', 'team2', 'venue',  'sub_satus', 'result', 'score', 'match_desc'])
+                                 'name',  'series', 'startdt', 'date', 'team1', 'team2', 'venue',  'sub_satus', 'result', 'score', 'match_desc'])
     for match in matches:
         # Team1
         filterTeam1 = filter(
@@ -527,7 +527,7 @@ def getMatchesBySeries(query):
 
     # Check Data
     matches = frappe.db.get_list('Cric Matches', filters={"series": query}, order_by='startdt asc', fields=[
-                                 'name', 'type', 'series', 'startdt', 'date', 'team1', 'team2', 'venue',  'sub_satus', 'result', 'score', 'match_format', 'match_desc'])
+                                 'name',  'series', 'startdt', 'date', 'team1', 'team2', 'venue',  'sub_satus', 'result', 'score', 'match_format', 'match_desc'])
     if (len(matches) == 0):
         matches = updateMatchBySeries(query)
     for match in matches:
