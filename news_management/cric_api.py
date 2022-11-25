@@ -170,13 +170,16 @@ def fetchSchedule():
 
 # Matches
 @frappe.whitelist(allow_guest=True)
-def fetchMatches():
+def fetchMatches(query=None):
     apiHost = frappe.db.get_single_value('Cric Credentials', 'api_host')
     apiKey = frappe.db.get_single_value('Cric Credentials', 'api_key')
     apiUrl = frappe.db.get_single_value('Cric Credentials', 'api_url')
 
+    
+
     # Matches
-    types = ['live', 'recent', 'upcoming']
+    types = [query] if query else ['live', 'recent', 'upcoming']
+    frappe.msgprint(str(types))
     for type in types:
         urlTournaments = apiUrl + "/matches/v1/" + type
         payload = {}
@@ -204,7 +207,8 @@ def fetchMatches():
                             addData.series_name = item['seriesName']
                             addData.insert()
                 updateMatch(item['matches'], type)
-    frappe.msgprint('Matches are Updated Successfully')
+    if query == None:
+        frappe.msgprint('Matches are Updated Successfully')
 
 
 # Teams
@@ -438,6 +442,9 @@ def getMatchesByDay(query):
 # Matches By Filter List
 @frappe.whitelist(allow_guest=True)
 def getMatchesByFilter(query):
+
+    if(query == 'live'):
+        fetchMatches(query)
 
     # Check Data
     series = frappe.db.get_list('Cric Series', filters={
