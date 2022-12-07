@@ -11,11 +11,9 @@
   "title",
   "published",
   "route",
+  "player_name",
   "team_name",
-  "team_sname",
-  "image_id",
-  "country_name",
-  "type"
+  "player_image"
  ],
  "fields": [
   {
@@ -49,29 +47,14 @@
    "label": "Team Name"
   },
   {
-   "fieldname": "team_sname",
+   "fieldname": "player_name",
    "fieldtype": "Data",
-   "label": "Team SName"
+   "label": "Player Name"
   },
   {
-   "fieldname": "image_id",
-   "fieldtype": "Data",
-   "label": "Image Id"
-  },
-  {
-   "fieldname": "country_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Country Name"
-  },
-  {
-   "fieldname": "type",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Type",
-   "options": "international\nleague\ndomestic\nwomen"
+   "fieldname": "player_image",
+   "fieldtype": "Attach Image",
+   "label": "Player Image"
   }
  ],
  "has_web_view": 1,
@@ -79,7 +62,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2022-11-16 18:13:20.756520",
+ "modified": "2022-12-07 08:49:42.271576",
  "modified_by": "Administrator",
  "module": "News Management",
  "name": "Cric Players",

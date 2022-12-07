@@ -13,7 +13,6 @@
   "route",
   "team_name",
   "team_sname",
-  "image_id",
   "country_name",
   "type",
   "team_image"
@@ -55,11 +54,6 @@
    "label": "Team SName"
   },
   {
-   "fieldname": "image_id",
-   "fieldtype": "Data",
-   "label": "Image Id"
-  },
-  {
    "fieldname": "country_name",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -76,7 +70,7 @@
   },
   {
    "fieldname": "team_image",
-   "fieldtype": "Data",
+   "fieldtype": "Attach Image",
    "label": "Team Image"
   }
  ],
@@ -85,7 +79,7 @@
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2022-11-19 00:14:40.933842",
+ "modified": "2022-12-07 08:50:40.163543",
  "modified_by": "Administrator",
  "module": "News Management",
  "name": "Cric Teams",

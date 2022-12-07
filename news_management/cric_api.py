@@ -175,8 +175,6 @@ def fetchMatches(query=None):
     apiKey = frappe.db.get_single_value('Cric Credentials', 'api_key')
     apiUrl = frappe.db.get_single_value('Cric Credentials', 'api_url')
 
-    
-
     # Matches
     types = [query] if query else ['live', 'recent', 'upcoming']
     frappe.msgprint(str(types))
@@ -242,7 +240,6 @@ def fetchTeams():
                             "title": item['teamId'],
                             'team_name': item['teamName'],
                             'team_sname': item['teamSName'],
-                            'image_id': item['imageId'],
                             "type": type,
                             'country_name': item['countryName'] if ('countryName' in item) else '',
                         })
@@ -251,12 +248,49 @@ def fetchTeams():
                         addData.title = str(item['teamId'])
                         addData.team_name = item['teamName']
                         addData.team_sname = item['teamSName']
-                        addData.image_id = item['imageId']
                         addData.type = type
                         addData.country_name = item['countryName'] if (
                             'countryName' in item) else ''
                         addData.insert()
     frappe.msgprint('Teams are Updated Successfully')
+
+
+# Players
+@frappe.whitelist(allow_guest=True)
+def fetchPlayers():
+    apiHost = frappe.db.get_single_value('Cric Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Cric Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Cric Credentials', 'api_url')
+
+    # Teams
+    urlTournaments = apiUrl + "stats/v1/player/trending"
+    payload = {}
+    headers = {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': apiHost
+    }
+    response = requests.request(
+        "GET", urlTournaments, headers=headers, data=payload)
+    if (response.status_code == 200):
+        data = response.json()
+        docType = "Cric Players"
+        for item in data['player']:
+            isExit = frappe.db.exists(
+                docType, {"title": str(item['id'])})
+            if (isExit):
+                frappe.db.set_value(docType, isExit, {
+                    "title": item['id'],
+                    'player_name': item['name'],
+                    'team_name': item['teamName'],
+                })
+            else:
+                addData = frappe.new_doc(docType)
+                addData.title = str(item['id'])
+                addData.player_name = item['name']
+                addData.team_name = item['teamName']
+                addData.insert()
+    frappe.msgprint('Player are Updated Successfully')
 
 
 # Update Match
@@ -402,6 +436,136 @@ def getTeamsList():
     return finalTeams
 
 
+# Teams Details
+@frappe.whitelist(allow_guest=True)
+def getTeamDetails(query):
+    apiHost = frappe.db.get_single_value('Cric Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Cric Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Cric Credentials', 'api_url')
+    headers = {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': apiHost
+    }
+
+    schedule = None
+    results = None
+    news = None
+    players = None
+    statsRun = None
+    statsWic = None
+
+    # Schedule
+    resSchedule = requests.request(
+        "GET", (apiUrl + "/teams/v1/" + query + "/schedule"), headers=headers, data={})
+    if (resSchedule.status_code == 200):
+        schedule = resSchedule.json()
+
+    # Results
+    resResults = requests.request(
+        "GET", (apiUrl + "/teams/v1/" + query + "/results"), headers=headers, data={})
+    if (resResults.status_code == 200):
+        results = resResults.json()
+
+    # News
+    resNews = requests.request(
+        "GET", (apiUrl + "/news/v1/team/" + query), headers=headers, data={})
+    if (resNews.status_code == 200):
+        news = resNews.json()
+
+     # Players
+    resPlayers = requests.request(
+        "GET", (apiUrl + "/teams/v1/" + query + "/players"), headers=headers, data={})
+    if (resPlayers.status_code == 200):
+        players = resPlayers.json()
+
+     # Stats Run
+    resStatsRun = requests.request(
+        "GET", (apiUrl + "/stats/v1/team/" + query + "?statsType=mostRuns"), headers=headers, data={})
+    if (resStatsRun.status_code == 200):
+        statsRun = resStatsRun.json()
+
+     # Stats Wic
+    resStatsWic = requests.request(
+        "GET", (apiUrl + "/stats/v1/team/" + query + "?statsType=mostWickets"), headers=headers, data={})
+    if (resStatsWic.status_code == 200):
+        statsWic = resStatsWic.json()
+
+    return {
+        "schedule": schedule if schedule else None,
+        "results": results if results else None,
+        "news": news if news else None,
+        "players": players if players else None,
+        "statsRun": statsRun if statsRun else None,
+        "statsWic": statsWic if statsWic else None,
+    }
+
+
+# Player List
+@frappe.whitelist(allow_guest=True)
+def getPlayersList():
+    players = frappe.db.get_list('Cric Players', filters={}, fields=[
+        'name', 'title', 'player_name', 'team_name'])
+    return players
+
+
+# Player Details
+@frappe.whitelist(allow_guest=True)
+def getPlayerDetails(query):
+    apiHost = frappe.db.get_single_value('Cric Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Cric Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Cric Credentials', 'api_url')
+    headers = {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': apiHost
+    }
+
+    info = None
+    career = None
+    news = None
+    bowling = None
+    batting = None
+
+    # Info
+    resInfo = requests.request(
+        "GET", (apiUrl + "/stats/v1/player/" + query), headers=headers, data={})
+    if (resInfo.status_code == 200):
+        info = resInfo.json()
+
+    # Career
+    resCareers = requests.request(
+        "GET", (apiUrl + "/stats/v1/player/" + query + "/career"), headers=headers, data={})
+    if (resCareers.status_code == 200):
+        career = resCareers.json()
+
+    # News
+    resNews = requests.request(
+        "GET", (apiUrl + "/news/v1/player/" + query), headers=headers, data={})
+    if (resNews.status_code == 200):
+        news = resNews.json()
+
+     # Bowling
+    resBowling = requests.request(
+        "GET", (apiUrl + "/stats/v1/player/" + query + "/bowling"), headers=headers, data={})
+    if (resBowling.status_code == 200):
+        bowling = resBowling.json()
+
+     # Batting
+    resBatting = requests.request(
+        "GET", (apiUrl + "/stats/v1/player/" + query + "/batting"), headers=headers, data={})
+    if (resBatting.status_code == 200):
+        batting = resBatting.json()
+
+    return {
+        "info": info if info else None,
+        "career": career if career else None,
+        "news": news if news else None,
+        "bowling": bowling if bowling else None,
+        "batting": batting if batting else None,
+    }
+
+
 # Matches By Day List
 @frappe.whitelist(allow_guest=True)
 def getMatchesByDay(query):
@@ -443,7 +607,7 @@ def getMatchesByDay(query):
 @frappe.whitelist(allow_guest=True)
 def getMatchesByFilter(query):
 
-    if(query == 'live'):
+    if (query == 'live'):
         fetchMatches(query)
 
     # Check Data
@@ -528,7 +692,7 @@ def getHomeMatchList(query):
 def getMatchesBySeries(query):
 
     series = frappe.db.get_list('Cric Series', filters={
-        'name': query}, fields=['name', 'date', 'type', 'series_name' ,'startdt', 'enddt'])
+        'name': query}, fields=['name', 'date', 'type', 'series_name', 'startdt', 'enddt'])
     teams = frappe.db.get_list(
         'Cric Teams', filters={}, fields=['name', 'team_name', 'team_sname'])
 
@@ -586,39 +750,137 @@ def getHighlights(query):
     scorecard = None
     highlights = None
     facts = None
-    matches = frappe.db.get_list('Cric Matches', filters={"name": query}, order_by='startdt asc', fields=['name',  'title', 'startdt',  'enddt', 'series', 'match_desc',  'match_format', 'team1', 'team2', 'venue', 'result', 'sub_satus', 'state', 'score'])
+    news = None
+    matches = frappe.db.get_list('Cric Matches', filters={"name": query}, order_by='startdt asc', fields=[
+                                 'name',  'title', 'startdt',  'enddt', 'series', 'match_desc',  'match_format', 'team1', 'team2', 'venue', 'result', 'sub_satus', 'state', 'score'])
     if (len(matches) > 0):
-        series = frappe.db.get_list('Cric Series', filters={'name': matches[0]['series']}, fields=['name', 'title', 'date', 'series_name' ,'startdt', 'enddt', 'status', 'home_country'])
-        team1 = frappe.db.get_list('Cric Teams', filters={'name': matches[0]['team1']}, fields=['name', 'title', 'team_name', 'team_sname', 'image_id', 'country_name', 'type', 'team_image'])
-        team2 = frappe.db.get_list('Cric Teams', filters={'name': matches[0]['team2']}, fields=['name', 'title', 'team_name', 'team_sname', 'image_id', 'country_name', 'type', 'team_image'])
+        series = frappe.db.get_list('Cric Series', filters={'name': matches[0]['series']}, fields=[
+                                    'name', 'title', 'date', 'series_name', 'startdt', 'enddt', 'status', 'home_country'])
+        team1 = frappe.db.get_list('Cric Teams', filters={'name': matches[0]['team1']}, fields=[
+                                   'name', 'title', 'team_name', 'team_sname', 'image_id', 'country_name', 'type', 'team_image'])
+        team2 = frappe.db.get_list('Cric Teams', filters={'name': matches[0]['team2']}, fields=[
+                                   'name', 'title', 'team_name', 'team_sname', 'image_id', 'country_name', 'type', 'team_image'])
 
         # Commentary
-        resCommentary = requests.request("GET", (apiUrl + "/mcenter/v1/" + query + "/comm"), headers=headers, data={})
+        resCommentary = requests.request(
+            "GET", (apiUrl + "/mcenter/v1/" + query + "/comm"), headers=headers, data={})
         if (resCommentary.status_code == 200):
             commentary = resCommentary.json()
 
         # Scorecard
-        resScorecard = requests.request("GET", (apiUrl + "/mcenter/v1/" + query + "/scard"), headers=headers, data={})
+        resScorecard = requests.request(
+            "GET", (apiUrl + "/mcenter/v1/" + query + "/scard"), headers=headers, data={})
         if (resScorecard.status_code == 200):
             scorecard = resScorecard.json()
 
         # Highlights
-        resHighlights = requests.request("GET", (apiUrl + "/mcenter/v1/" + query + "/hcomm"), headers=headers, data={})
+        resHighlights = requests.request(
+            "GET", (apiUrl + "/mcenter/v1/" + query + "/hcomm"), headers=headers, data={})
         if (resHighlights.status_code == 200):
             highlights = resHighlights.json()
 
         # Facts
-        resFacts = requests.request("GET", (apiUrl + "/mcenter/v1/" + query), headers=headers, data={})
+        resFacts = requests.request(
+            "GET", (apiUrl + "/mcenter/v1/" + query), headers=headers, data={})
         if (resFacts.status_code == 200):
             facts = resFacts.json()
 
+        # News
+        resNews = requests.request(
+            "GET", (apiUrl + "/news/v1/series/" + series[0]['name']), headers=headers, data={})
+        if (resNews.status_code == 200):
+            news = resNews.json()
+
     return {
-        "series":series[0] if series else None,
-        "matches":matches[0] if matches else None,
-        "team1":team1[0] if team1 else None,
-        "team2":team2[0] if team2 else None,
-        "commentary":commentary if commentary else None,
-        "scorecard":scorecard if scorecard else None,
-        "highlights":highlights if highlights else None,
-        "facts":facts if facts else None,
-        }
+        "series": series[0] if series else None,
+        "matches": matches[0] if matches else None,
+        "team1": team1[0] if team1 else None,
+        "team2": team2[0] if team2 else None,
+        "commentary": commentary if commentary else None,
+        "scorecard": scorecard if scorecard else None,
+        "highlights": highlights if highlights else None,
+        "facts": facts if facts else None,
+        "news": news if news else None,
+    }
+
+
+# Rankings
+@frappe.whitelist(allow_guest=True)
+def getRankings(query):
+    apiHost = frappe.db.get_single_value('Cric Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Cric Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Cric Credentials', 'api_url')
+    headers = {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': apiHost
+    }
+    rankings = None
+    resRankings = requests.request(
+        "GET", (apiUrl + "/stats/v1/rankings/batsmen?formatType=" + query), headers=headers, data={})
+    if (resRankings.status_code == 200):
+        rankings = resRankings.json()
+
+    return {
+        "rankings": rankings if rankings else None,
+    }
+
+
+# Rankings
+@frappe.whitelist(allow_guest=True)
+def getRankings(category, type):
+    apiHost = frappe.db.get_single_value('Cric Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Cric Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Cric Credentials', 'api_url')
+    headers = {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': apiHost
+    }
+    json = None
+    resJson = requests.request(
+        "GET", (apiUrl + "/stats/v1/rankings/" + category + "?formatType=" + type), headers=headers, data={})
+    if (resJson.status_code == 200):
+        json = resJson.json()
+
+    return json
+
+
+# Standing
+@frappe.whitelist(allow_guest=True)
+def getStanding(type):
+    apiHost = frappe.db.get_single_value('Cric Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Cric Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Cric Credentials', 'api_url')
+    headers = {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': apiHost
+    }
+    json = None
+    resJson = requests.request(
+        "GET", (apiUrl + "/stats/v1/iccstanding/team/matchtype/" + type), headers=headers, data={})
+    if (resJson.status_code == 200):
+        json = resJson.json()
+
+    return json
+
+
+# Topstats
+@frappe.whitelist(allow_guest=True)
+def getTopstats(type):
+    apiHost = frappe.db.get_single_value('Cric Credentials', 'api_host')
+    apiKey = frappe.db.get_single_value('Cric Credentials', 'api_key')
+    apiUrl = frappe.db.get_single_value('Cric Credentials', 'api_url')
+    headers = {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': apiHost
+    }
+    json = None
+    resJson = requests.request(
+        "GET", (apiUrl + "/stats/v1/topstats/0?statsType=" + type), headers=headers, data={})
+    if (resJson.status_code == 200):
+        json = resJson.json()
+
+    return json
