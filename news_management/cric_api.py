@@ -828,7 +828,7 @@ def getRankings(query):
 
 # Rankings
 @frappe.whitelist(allow_guest=True)
-def getRankings(category, type):
+def getRankings(category, type, isWomen=0):
     apiHost = frappe.db.get_single_value('Cric Credentials', 'api_host')
     apiKey = frappe.db.get_single_value('Cric Credentials', 'api_key')
     apiUrl = frappe.db.get_single_value('Cric Credentials', 'api_url')
@@ -839,7 +839,7 @@ def getRankings(category, type):
     }
     json = None
     resJson = requests.request(
-        "GET", (apiUrl + "/stats/v1/rankings/" + category + "?formatType=" + type), headers=headers, data={})
+        "GET", (apiUrl + "/stats/v1/rankings/" + category + "?formatType=" + type + "&isWomen=" + isWomen), headers=headers, data={})
     if (resJson.status_code == 200):
         json = resJson.json()
 
