@@ -838,8 +838,11 @@ def getRankings(category, type, isWomen):
         'X-RapidAPI-Host': apiHost
     }
     json = None
-    resJson = requests.request(
-        "GET", (apiUrl + "/stats/v1/rankings/" + category + "?formatType=" + type + "&isWomen=" + isWomen), headers=headers, data={})
+    resJson=None
+    if(isWomen == 1):
+        resJson = requests.request("GET", (apiUrl + "/stats/v1/rankings/" + category + "?formatType=" + type + "&isWomen=" + isWomen), headers=headers, data={})
+    else:
+        resJson = requests.request("GET", (apiUrl + "/stats/v1/rankings/" + category + "?formatType=" + type), headers=headers, data={})
     if (resJson.status_code == 200):
         json = resJson.json()
 
