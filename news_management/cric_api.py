@@ -828,7 +828,7 @@ def getRankings(query):
 
 # Rankings
 @frappe.whitelist(allow_guest=True)
-def getRankings(category, type, isWomen=0):
+def getRankings(category, type, isWomen):
     apiHost = frappe.db.get_single_value('Cric Credentials', 'api_host')
     apiKey = frappe.db.get_single_value('Cric Credentials', 'api_key')
     apiUrl = frappe.db.get_single_value('Cric Credentials', 'api_url')
