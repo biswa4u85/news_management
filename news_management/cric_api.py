@@ -607,8 +607,8 @@ def getMatchesByDay(query):
 @frappe.whitelist(allow_guest=True)
 def getMatchesByFilter(query):
 
-    # if (query == 'live'):
-    fetchMatches(query)
+    if (query == 'live'):
+        fetchMatches(query)
 
     # Check Data
     series = frappe.db.get_list('Cric Series', filters={
