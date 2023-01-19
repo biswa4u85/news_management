@@ -840,7 +840,7 @@ def getRankings(category, type, isWomen):
     json = None
     resJson=None
     if(isWomen == 1):
-        resJson = requests.request("GET", (apiUrl + "/stats/v1/rankings/" + category + "?formatType=" + type + "&isWomen=" + isWomen), headers=headers, data={})
+        resJson = requests.request("GET", (apiUrl + "/stats/v1/rankings/" + category + "?formatType=" + type + "&isWomen=" + '1'), headers=headers, data={})
     else:
         resJson = requests.request("GET", (apiUrl + "/stats/v1/rankings/" + category + "?formatType=" + type), headers=headers, data={})
     if (resJson.status_code == 200):
