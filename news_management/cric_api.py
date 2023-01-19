@@ -615,7 +615,7 @@ def getMatchesByFilter(query):
                                 'status': 'open'}, fields=['name', 'date', 'type', 'series_name'])
     teams = frappe.db.get_list(
         'Cric Teams', filters={}, fields=['name', 'team_name', 'team_sname'])
-    matches = frappe.db.get_list('Cric Matches', filters={"sub_satus": query}, order_by='startdt asc', fields=[
+    matches = frappe.db.get_list('Cric Matches', filters={"sub_satus": query}, order_by='startdt desc', fields=[
                                  'name', 'series', 'startdt',  'team1', 'team2', 'venue',  'sub_satus', 'result', 'score', 'match_desc'])
     for match in matches:
         # Team1
